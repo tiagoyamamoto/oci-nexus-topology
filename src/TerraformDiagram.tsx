@@ -202,11 +202,10 @@ export function TerraformDiagram() {
                         <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse" />
                         TERRAFORM TOPOLOGY
                     </h1>
-                    <p className="text-xs font-bold text-zinc-400 mt-1 uppercase tracking-widest flex flex-col gap-1">
+                    <p className="text-xs font-bold text-zinc-400 mt-3 uppercase tracking-widest flex flex-col gap-2">
                         <span>Source: invista-nexus_Fix-Unauthorized</span>
-                        <a href="https://inventcloud.com.br/" target="_blank" rel="noreferrer" className="flex items-center gap-1 text-sky-400 hover:text-sky-300 transition-colors mt-2">
-                            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                            inventcloud.com.br
+                        <a href="https://inventcloud.com.br/" target="_blank" rel="noreferrer" className="mt-2 block w-[140px] opacity-80 hover:opacity-100 transition-opacity">
+                            <img src="https://inventcloud.com.br/wp-content/uploads/2021/05/logo-invent-oficial.png" alt="Inventcloud" className="w-full h-auto object-contain" />
                         </a>
                     </p>
 
