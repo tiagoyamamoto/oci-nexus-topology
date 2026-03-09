@@ -215,7 +215,7 @@ export function TerraformDiagram() {
                     <p className="text-xs font-bold text-zinc-400 mt-3 uppercase tracking-widest flex flex-col gap-2">
                         <span>Source: invista-nexus_Fix-Unauthorized</span>
                         <a href="https://inventcloud.com.br/" target="_blank" rel="noreferrer" className="mt-2 block w-[140px] opacity-80 hover:opacity-100 transition-opacity">
-                            <img src="https://inventcloud.com.br/wp-content/uploads/2021/05/logo-invent-oficial.png" alt="Inventcloud" className="w-full h-auto object-contain" />
+                            <img src="/inventCloud_modelo-color-horiz-1.svg" alt="Inventcloud" className="w-full h-auto object-contain" />
                         </a>
                     </p>
 
