@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import {
   ReactFlow,
   MiniMap,
@@ -8,9 +8,9 @@ import {
   useEdgesState,
   addEdge,
   Panel,
-  Connection,
-  Edge,
-  Node,
+  type Connection,
+  type Edge,
+  type Node,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -79,7 +79,7 @@ const initialEdges: Edge[] = [
 ];
 
 export default function App() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   const onConnect = useCallback(

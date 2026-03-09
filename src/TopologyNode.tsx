@@ -3,14 +3,13 @@ import { Handle, Position } from '@xyflow/react';
 import {
     Network,
     Cloud,
-    Server,
     Database,
     Globe,
     ShieldCheck,
     Activity,
     Box
 } from 'lucide-react';
-import { TopologyNodeData, ResourceType } from './types';
+import type { TopologyNodeData, ResourceType } from './types';
 import { cn } from './lib/utils';
 
 const iconMap: Record<ResourceType, React.ElementType> = {

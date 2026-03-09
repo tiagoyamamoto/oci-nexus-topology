@@ -1,4 +1,4 @@
-import { OCIResource } from './types';
+import type { OCIResource } from './types';
 
 export const nexusTopology: OCIResource[] = [
     // Network Layer
