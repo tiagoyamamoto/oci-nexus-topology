@@ -1,11 +1,14 @@
 import type { OCIResource } from './types';
 
 export const terraformTopology: OCIResource[] = [
-    // Storage & Support Services
+    // Security & Storage Layer
     { id: 'tf_vault', name: 'OCI Vault (KMS)', type: 'shieldcheck', details: 'vault.tf - AES-256 Encryption', status: 'active' },
-    { id: 'tf_bucket', name: 'Object Storage Bucket', type: 'bucket', details: 'bucket.tf - Versioned Artifacts', status: 'active' },
+    { id: 'tf_bucket', name: 'MFE Buckets', type: 'bucket', details: 'bucket.tf - Frontend Assets', status: 'active' },
 
-    // DatabasesLayer
+    // API Gateway Layer
+    { id: 'tf_apigw', name: 'API Gateway (Shared)', type: 'apigateway', details: 'api_gateway_mfe.tf', status: 'active' },
+
+    // Databases Layer
     { id: 'tf_postgresql', name: 'PostgreSQL', type: 'database', details: 'postgresql.tf - Managed DB', status: 'active' },
     { id: 'tf_redis', name: 'Redis Cluster', type: 'database', details: 'redis.tf - Distributed Cache', status: 'active' },
     { id: 'tf_adj', name: 'Autonomous JSON DB', type: 'database', details: 'autonomous_json.tf', status: 'active' },
