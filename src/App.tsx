@@ -15,57 +15,55 @@ import {
 import '@xyflow/react/dist/style.css';
 
 import { TopologyNode } from './TopologyNode';
+import { CompartmentNode } from './CompartmentNode';
 
 const nodeTypes = {
   topology: TopologyNode,
+  compartment: CompartmentNode,
 };
 
 const initialNodes: Node[] = [
   // ------------------- GROUPS -------------------
   {
     id: 'grp-shared',
-    type: 'group',
+    type: 'compartment',
     position: { x: 800, y: 100 },
-    style: { width: 280, height: 180, backgroundColor: 'rgba(59, 130, 246, 0.05)', border: '2px dashed #3b82f6', borderRadius: '12px' },
-    className: 'text-blue-300 font-extrabold p-2 text-sm',
-    data: { label: 'cmp-shared-inv' },
+    style: { width: 340, height: 220, backgroundColor: 'rgba(59, 130, 246, 0.05)', border: '2px dashed #3b82f6', borderRadius: '12px', overflow: 'hidden' },
+    data: { label: 'cmp-shared-inv', color: '#3b82f6' },
   },
   {
     id: 'grp-oke-dev',
-    type: 'group',
-    position: { x: 50, y: 100 },
-    style: { width: 650, height: 260, backgroundColor: 'rgba(234, 179, 8, 0.05)', border: '2px dashed #eab308', borderRadius: '12px' },
-    className: 'text-yellow-300 font-extrabold p-2 text-sm',
-    data: { label: 'OKE > DEV' },
+    type: 'compartment',
+    position: { x: 50, y: 50 },
+    style: { width: 680, height: 300, backgroundColor: 'rgba(234, 179, 8, 0.05)', border: '2px dashed #eab308', borderRadius: '12px', overflow: 'hidden' },
+    data: { label: 'Compartment: OKE > DEV', color: '#eab308' },
   },
   {
     id: 'grp-dev-inv',
-    type: 'group',
+    type: 'compartment',
     position: { x: 50, y: 400 },
-    style: { width: 1030, height: 520, backgroundColor: 'rgba(168, 85, 247, 0.05)', border: '2px dashed #a855f7', borderRadius: '12px' },
-    className: 'text-purple-300 font-extrabold p-2 text-sm',
-    data: { label: 'cmp-dev-inv' },
+    style: { width: 1090, height: 680, backgroundColor: 'rgba(168, 85, 247, 0.05)', border: '2px dashed #a855f7', borderRadius: '12px', overflow: 'visible' },
+    data: { label: 'Compartment: cmp-dev-inv', color: '#a855f7' },
   },
   {
     id: 'grp-nexus',
-    type: 'group',
+    type: 'compartment',
     parentId: 'grp-dev-inv',
-    position: { x: 20, y: 150 },
-    style: { width: 480, height: 350, backgroundColor: 'rgba(239, 68, 68, 0.05)', border: '2px dashed #ef4444', borderRadius: '12px' },
-    className: 'text-red-300 font-extrabold p-2 text-sm',
-    data: { label: 'cmp-dev-nexus (Sub-Compartment)' },
+    position: { x: 30, y: 150 },
+    style: { width: 560, height: 490, backgroundColor: 'rgba(239, 68, 68, 0.05)', border: '2px dashed #ef4444', borderRadius: '12px', overflow: 'visible' },
+    data: { label: 'Sub-Compartment: cmp-dev-nexus', color: '#ef4444' },
   },
 
   // ------------------- EXTERNAL -------------------
   {
     id: 'internet',
-    position: { x: 380, y: -160 },
+    position: { x: 380, y: -200 },
     type: 'topology',
     data: { resource: { name: 'Internet', type: 'gateway', details: 'Public Traffic', status: 'active' } },
   },
   {
     id: 'cloudflare',
-    position: { x: 380, y: -40 },
+    position: { x: 380, y: -80 },
     type: 'topology',
     data: { resource: { name: 'Cloudflare', type: 'apigateway', details: 'WAF & DNS (*.invista.com.br)', status: 'active' } },
   },
@@ -74,7 +72,7 @@ const initialNodes: Node[] = [
   {
     id: 'drg',
     parentId: 'grp-shared',
-    position: { x: 40, y: 60 },
+    position: { x: 70, y: 80 },
     type: 'topology',
     data: { resource: { name: 'DRG-Invista-Shared', type: 'gateway', details: 'Central Routing Hub', status: 'manual' } },
   },
@@ -83,21 +81,21 @@ const initialNodes: Node[] = [
   {
     id: 'vcn-oke',
     parentId: 'grp-oke-dev',
-    position: { x: 230, y: 50 },
+    position: { x: 240, y: 70 },
     type: 'topology',
     data: { resource: { name: 'VCN vcn-oke', type: 'vcn', details: '10.110.0.0/16 (Terraform)', status: 'active' } },
   },
   {
     id: 'apigw-mfe',
     parentId: 'grp-oke-dev',
-    position: { x: 100, y: 160 },
+    position: { x: 100, y: 190 },
     type: 'topology',
     data: { resource: { name: 'api-gateway-mfe-dev', type: 'apigateway', details: '147.15.97.158 (PUBLIC)', status: 'active' } },
   },
   {
     id: 'bucket-mfe',
     parentId: 'grp-oke-dev',
-    position: { x: 350, y: 160 },
+    position: { x: 380, y: 190 },
     type: 'topology',
     data: { resource: { name: 'mfe-*-dev Buckets', type: 'bucket', details: 'Frontend Assets', status: 'active' } },
   },
@@ -106,7 +104,7 @@ const initialNodes: Node[] = [
   {
     id: 'vcn-dev',
     parentId: 'grp-dev-inv',
-    position: { x: 750, y: 50 },
+    position: { x: 800, y: 60 },
     type: 'topology',
     data: { resource: { name: 'VCN-DEV', type: 'vcn', details: '10.6.0.0/16 (Shared/Manual)', status: 'manual' } },
   },
@@ -115,28 +113,28 @@ const initialNodes: Node[] = [
   {
     id: 'apigw-nexus',
     parentId: 'grp-nexus',
-    position: { x: 120, y: 40 },
+    position: { x: 180, y: 60 },
     type: 'topology',
     data: { resource: { name: 'api-gateway-nexus-dev', type: 'apigateway', details: '10.6.0.123 (PRIVATE)', status: 'manual' } },
   },
   {
     id: 'cls-nexus',
     parentId: 'grp-nexus',
-    position: { x: 20, y: 150 },
+    position: { x: 30, y: 190 },
     type: 'topology',
     data: { resource: { name: 'cls-dev-nexus', type: 'cluster', details: 'v1.34.1 | 3 Nodes', status: 'active' } },
   },
   {
     id: 'cls-barramento',
     parentId: 'grp-nexus',
-    position: { x: 250, y: 150 },
+    position: { x: 310, y: 190 },
     type: 'topology',
     data: { resource: { name: 'cls-dev-barramento', type: 'cluster', details: 'v1.34.1 | 3 Nodes', status: 'active' } },
   },
   {
     id: 'cls-obs',
     parentId: 'grp-nexus',
-    position: { x: 135, y: 250 },
+    position: { x: 170, y: 400 }, // Moved outside visually but logically still inside? Wait, height is 320.
     type: 'topology',
     data: { resource: { name: 'cls-dev-observabilidade', type: 'cluster', details: 'v1.34.1 | 3 Nodes', status: 'active' } },
   },
