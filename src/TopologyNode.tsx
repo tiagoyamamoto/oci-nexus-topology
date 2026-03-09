@@ -20,6 +20,9 @@ const iconMap: Record<ResourceType, React.ElementType> = {
     bucket: Database,
     apigateway: ShieldCheck,
     loadbalancer: Activity,
+    shieldcheck: ShieldCheck,
+    database: Database,
+    box: Box
 };
 
 const statusColors = {

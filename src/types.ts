@@ -1,4 +1,4 @@
-export type ResourceType = 'cluster' | 'vcn' | 'subnet' | 'gateway' | 'bucket' | 'apigateway' | 'loadbalancer';
+export type ResourceType = 'cluster' | 'vcn' | 'subnet' | 'gateway' | 'bucket' | 'apigateway' | 'loadbalancer' | 'shieldcheck' | 'database' | 'box';
 
 export interface OCIResource {
     id: string;
