@@ -11,29 +11,34 @@ export const nexusTopology: OCIResource[] = [
     { id: 'sgw', name: 'Service Gateway', type: 'gateway', details: 'OCI-to-OCI', status: 'active' },
     { id: 'drg', name: 'DRG-Invista-Shared', type: 'gateway', details: 'VCN Connectivity', status: 'manual' },
 
-    // OCI Object Storage Buckets — MFE assets (acessados via api-gateway-dev unificado)
-    // DELETADOS: 6 API Gateways MFE públicos individuais (migrados para api-gateway-dev)
+    // CI/CD — Azure DevOps (externo)
+    { id: 'azuredevops', name: 'Azure DevOps', type: 'box', details: 'CN-Squad / Invista FIDC - Nexus | Pipelines: ms-* + MFEs', status: 'active' },
 
-    // API Gateway — Nexus (Private, cmp-dev-nexus compartment)
-    { id: 'apigw-nexus', name: 'api-gateway-nexus-dev', type: 'apigateway', details: '10.6.0.123 (Private)', status: 'manual' },
+    // API Gateway — Nexus (Private, cmp-dev-nexus) — 11 deployments ATIVOS
+    // Rotas: /api/{auth,sso,user,user-internal,user-external,person,poc,role,commercial-manager,cache} + /mfe-shell
+    { id: 'apigw-nexus', name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'dnqe6ufr... (PRIVATE) | 11 routes ACTIVE | /api/{auth,sso,user,person,poc,role,...}', status: 'active' },
 
-    // API Gateway — Dev (Private, cmp-dev-inv, SBNT-DEV 10.6.0.0/24)
-    { id: 'apigw-dev', name: 'api-gateway-dev', type: 'apigateway', details: 'bqdgz22e5... (PRIVATE) | 10.6.0.181 | SBNT-DEV', status: 'active' },
+    // API Gateway — Dev Unificado (Private, cmp-dev-inv) — deploy-mfe-unified-dev
+    { id: 'apigw-dev', name: 'api-gateway-dev', type: 'apigateway', details: 'bqdgz22e5... (PRIVATE) | 10.6.0.181 | deploy-mfe-unified-dev | MFEs + 9 ms-*', status: 'active' },
 
     // Shared — FortiGate + LB
     { id: 'fortigate', name: 'FortiGate', type: 'gateway', details: '129.148.17.8 (Public IP) | SBNT-PUBLIC-SHARED', status: 'active' },
     { id: 'lb-crivo-dev', name: 'Test_Crivo_Dev (LB)', type: 'loadbalancer', details: '10.8.4.127 (Private) | SBNT-LB-SHARED | crivo_routes', status: 'active' },
 
-    // Clusters
-    { id: 'cls-nexus', name: 'cls-dev-nexus', type: 'cluster', details: 'v1.34.1 | 3 Nodes', status: 'active' },
-    { id: 'cls-barramento', name: 'cls-dev-barramento', type: 'cluster', details: 'v1.34.1 | 3 Nodes', status: 'active' },
-    { id: 'cls-observabilidade', name: 'cls-dev-observabilidade', type: 'cluster', details: 'v1.34.1 | 3 Nodes', status: 'active' },
+    // Clusters OKE (cmp-dev-nexus) — todos v1.34.1 | 3 nodes
+    { id: 'cls-nexus', name: 'cls-dev-nexus', type: 'cluster', details: 'v1.34.1 | 3 Nodes | nexus-services namespace', status: 'active' },
+    { id: 'cls-barramento', name: 'cls-dev-barramento', type: 'cluster', details: 'v1.34.1 | 3 Nodes | integration-hub namespace', status: 'active' },
+    { id: 'cls-observabilidade', name: 'cls-dev-observabilidade', type: 'cluster', details: 'v1.34.1 | 3 Nodes | monitoring/logging', status: 'active' },
 
-    // Load Balancers
-    { id: 'lb-nexus-pub', name: 'LB nexus (public)', type: 'loadbalancer', details: '137.131.236.202', status: 'active' },
-    { id: 'lb-nexus-int', name: 'LB nexus (internal)', type: 'loadbalancer', details: '10.110.135.3 | nginx-internal | 8 ms-* services', status: 'active' },
-    { id: 'lb-barramento', name: 'LB barramento', type: 'loadbalancer', details: '10.110.133.131 | nginx-internal | ms-barramento', status: 'active' },
-    { id: 'lb-observ', name: 'LB observ.', type: 'loadbalancer', details: '10.110.129.64', status: 'active' },
+    // Load Balancers (cmp-dev-nexus) — dados confirmados via OCI CLI
+    { id: 'lb-nexus-pub', name: 'LB nexus (public)', type: 'loadbalancer', details: '137.131.236.202 | PUBLIC | cls-dev-nexus → nginx', status: 'active' },
+    { id: 'lb-nexus-int', name: 'LB nexus (nginx-int)', type: 'loadbalancer', details: '10.110.143.54 | PRIVATE | nginx-internal | ms-* services', status: 'active' },
+    { id: 'lb-nexus-ext', name: 'LB nexus (nginx-ext)', type: 'loadbalancer', details: '10.110.130.171 | PRIVATE | nginx-external | cls-dev-nexus', status: 'active' },
+    { id: 'lb-barramento', name: 'LB barramento', type: 'loadbalancer', details: '10.110.139.53 | PRIVATE | nginx-internal | ms-barramento', status: 'active' },
+    { id: 'lb-observ', name: 'LB observabilidade', type: 'loadbalancer', details: '10.110.136.228 | PRIVATE | cls-dev-observabilidade', status: 'active' },
+
+    // Database — Autonomous JSON Database (cmp-dev-nexus)
+    { id: 'db-nexus', name: 'nexus-dev (AJD)', type: 'database', details: 'Autonomous JSON Database | AVAILABLE | 19c | cmp-dev-nexus', status: 'active' },
 
     // ms-* API Services (OKE, routed via api-gateway-dev unified deployment)
     { id: 'ms-auth-external', name: 'ms-auth-external', type: 'cluster', details: '/ms-auth-external/ | nexus-services | cls-dev-nexus', status: 'active' },
@@ -46,7 +51,7 @@ export const nexusTopology: OCIResource[] = [
     { id: 'ms-user', name: 'ms-user', type: 'cluster', details: '/ms-user/ | nexus-services | cls-dev-nexus', status: 'active' },
     { id: 'ms-barramento', name: 'ms-barramento', type: 'cluster', details: '/ms-barramento/ | integration-hub | cls-dev-barramento', status: 'active' },
 
-    // Storage — MFE Buckets (OCI Object Storage, public read)
+    // Storage — MFE Buckets (OCI Object Storage, cmp-dev-nexus, public read)
     { id: 'bucket-shell', name: 'mfe-shell-dev', type: 'bucket', details: 'Shell (host app) assets', status: 'active' },
     { id: 'bucket-auth', name: 'mfe-auth-dev', type: 'bucket', details: 'Auth MFE assets', status: 'active' },
     { id: 'bucket-user', name: 'mfe-user-dev', type: 'bucket', details: 'User MFE assets', status: 'active' },
@@ -54,6 +59,6 @@ export const nexusTopology: OCIResource[] = [
     { id: 'bucket-poc', name: 'mfe-poc-dev', type: 'bucket', details: 'PoC MFE assets', status: 'active' },
     { id: 'bucket-formalization', name: 'mfe-formalization-dev', type: 'bucket', details: 'Formalization MFE assets', status: 'active' },
 
-    // Storage — Infra
-    { id: 'bucket-tfstate', name: 'tfstate-dev-*', type: 'bucket', details: 'Infrastructure State', status: 'manual' },
+    // Storage — Terraform State (cmp-dev-nexus, 3 buckets)
+    { id: 'bucket-tfstate', name: 'tfstate-* (3 buckets)', type: 'bucket', details: 'tfstate-terraform | tfstate-gqysee | tfstate-inidhr', status: 'manual' },
 ];

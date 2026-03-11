@@ -42,23 +42,23 @@ const initialNodes: Node[] = [
     id: 'grp-dev-inv',
     type: 'compartment',
     position: { x: 50, y: 200 },
-    style: { width: 1090, height: 1060, backgroundColor: 'rgba(168, 85, 247, 0.05)', border: '2px dashed #a855f7', borderRadius: '12px', overflow: 'visible' },
+    style: { width: 1090, height: 1240, backgroundColor: 'rgba(168, 85, 247, 0.05)', border: '2px dashed #a855f7', borderRadius: '12px', overflow: 'visible' },
     data: { label: 'Compartment: cmp-dev-inv', color: '#a855f7' },
   },
   {
     id: 'grp-buckets',
     type: 'compartment',
     parentId: 'grp-dev-inv',
-    position: { x: 30, y: 800 },
+    position: { x: 30, y: 970 },
     style: { width: 1020, height: 230, backgroundColor: 'rgba(20, 184, 166, 0.05)', border: '2px dashed #14b8a6', borderRadius: '12px', overflow: 'hidden' },
-    data: { label: 'OCI Object Storage — MFE Assets', color: '#14b8a6' },
+    data: { label: 'OCI Object Storage — MFE Assets (cmp-dev-nexus)', color: '#14b8a6' },
   },
   {
     id: 'grp-nexus',
     type: 'compartment',
     parentId: 'grp-dev-inv',
     position: { x: 30, y: 150 },
-    style: { width: 560, height: 620, backgroundColor: 'rgba(239, 68, 68, 0.05)', border: '2px dashed #ef4444', borderRadius: '12px', overflow: 'visible' },
+    style: { width: 580, height: 790, backgroundColor: 'rgba(239, 68, 68, 0.05)', border: '2px dashed #ef4444', borderRadius: '12px', overflow: 'visible' },
     data: { label: 'Sub-Compartment: cmp-dev-nexus', color: '#ef4444' },
   },
 
@@ -74,6 +74,12 @@ const initialNodes: Node[] = [
     position: { x: 230, y: -80 },
     type: 'topology',
     data: { resource: { name: 'Cloudflare', type: 'apigateway', details: 'WAF & DNS (*.invista.com.br)', status: 'active' } },
+  },
+  {
+    id: 'azuredevops',
+    position: { x: -380, y: 300 },
+    type: 'topology',
+    data: { resource: { name: 'Azure DevOps', type: 'box', details: 'CN-Squad / Invista FIDC - Nexus | Pipelines: ms-* + MFEs + infra', status: 'active' } },
   },
 
   // ------------------- SHARED INV -------------------
@@ -170,44 +176,58 @@ const initialNodes: Node[] = [
   {
     id: 'apigw-nexus',
     parentId: 'grp-nexus',
-    position: { x: 180, y: 60 },
+    position: { x: 170, y: 50 },
     type: 'topology',
-    data: { resource: { name: 'api-gateway-nexus-dev', type: 'apigateway', details: '10.6.0.123 (PRIVATE)', status: 'manual' } },
+    data: { resource: { name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'dnqe6ufr... (PRIVATE) | 11 routes ACTIVE | /api/{auth,sso,user,person,poc,role,cache,...}', status: 'active' } },
   },
   {
     id: 'cls-nexus',
     parentId: 'grp-nexus',
-    position: { x: 30, y: 190 },
+    position: { x: 20, y: 190 },
     type: 'topology',
-    data: { resource: { name: 'cls-dev-nexus', type: 'cluster', details: 'v1.34.1 | 3 Nodes', status: 'active' } },
+    data: { resource: { name: 'cls-dev-nexus', type: 'cluster', details: 'v1.34.1 | 3 Nodes | nexus-services', status: 'active' } },
   },
   {
     id: 'cls-barramento',
     parentId: 'grp-nexus',
-    position: { x: 310, y: 190 },
+    position: { x: 340, y: 190 },
     type: 'topology',
-    data: { resource: { name: 'cls-dev-barramento', type: 'cluster', details: 'v1.34.1 | 3 Nodes', status: 'active' } },
+    data: { resource: { name: 'cls-dev-barramento', type: 'cluster', details: 'v1.34.1 | 3 Nodes | integration-hub', status: 'active' } },
   },
   {
     id: 'cls-obs',
     parentId: 'grp-nexus',
-    position: { x: 170, y: 360 },
+    position: { x: 170, y: 350 },
     type: 'topology',
-    data: { resource: { name: 'cls-dev-observabilidade', type: 'cluster', details: 'v1.34.1 | 3 Nodes', status: 'active' } },
+    data: { resource: { name: 'cls-dev-observabilidade', type: 'cluster', details: 'v1.34.1 | 3 Nodes | monitoring', status: 'active' } },
   },
   {
     id: 'lb-nexus-int',
     parentId: 'grp-nexus',
-    position: { x: 30, y: 490 },
+    position: { x: 20, y: 490 },
     type: 'topology',
-    data: { resource: { name: 'LB nexus-int', type: 'loadbalancer', details: '10.110.135.3 | nginx-internal', status: 'active' } },
+    data: { resource: { name: 'LB nexus (nginx-int)', type: 'loadbalancer', details: '10.110.143.54 | nginx-internal | ms-* services', status: 'active' } },
   },
   {
     id: 'lb-barramento-node',
     parentId: 'grp-nexus',
-    position: { x: 310, y: 490 },
+    position: { x: 340, y: 490 },
     type: 'topology',
-    data: { resource: { name: 'LB barramento', type: 'loadbalancer', details: '10.110.133.131 | nginx-internal', status: 'active' } },
+    data: { resource: { name: 'LB barramento', type: 'loadbalancer', details: '10.110.139.53 | nginx-internal | ms-barramento', status: 'active' } },
+  },
+  {
+    id: 'lb-observ-node',
+    parentId: 'grp-nexus',
+    position: { x: 170, y: 490 },
+    type: 'topology',
+    data: { resource: { name: 'LB observ.', type: 'loadbalancer', details: '10.110.136.228 | cls-dev-observabilidade', status: 'active' } },
+  },
+  {
+    id: 'db-nexus',
+    parentId: 'grp-nexus',
+    position: { x: 170, y: 640 },
+    type: 'topology',
+    data: { resource: { name: 'nexus-dev (AJD)', type: 'database', details: 'Autonomous JSON Database | AVAILABLE | 19c', status: 'active' } },
   },
 ];
 
@@ -232,6 +252,10 @@ const initialEdges: Edge[] = [
   { id: 'e-apigwdev-lbbarr', source: 'apigw-dev', target: 'lb-barramento-node', label: '/ms-barramento/', animated: true, style: { stroke: '#f97316' } },
   { id: 'e-lbnexusint-clsnexus', source: 'lb-nexus-int', target: 'cls-nexus', label: 'nexus-services', style: { stroke: '#f97316' } },
   { id: 'e-lbbarr-clsbarr', source: 'lb-barramento-node', target: 'cls-barramento', label: 'integration-hub', style: { stroke: '#f97316' } },
+  { id: 'e-lbobserv-clsobs', source: 'lb-observ-node', target: 'cls-obs', label: 'observ.', style: { stroke: '#6366f1' } },
+
+  // api-gateway-nexus-dev → AJD Database (ms-* consomem o banco)
+  { id: 'e-clsnexus-db', source: 'cls-nexus', target: 'db-nexus', label: 'AJD', style: { stroke: '#84cc16' } },
 
   // DRG attachments
   { id: 'e-drg-vcnoke', source: 'drg', target: 'vcn-oke', label: 'ATT-VCN-OKE-DEV' },
@@ -242,6 +266,13 @@ const initialEdges: Edge[] = [
   { id: 'e-vcnoke-clsnexus', source: 'vcn-oke', target: 'cls-nexus' },
   { id: 'e-vcnoke-clsbarr', source: 'vcn-oke', target: 'cls-barramento' },
   { id: 'e-vcnoke-clsobs', source: 'vcn-oke', target: 'cls-obs' },
+
+  // Azure DevOps CI/CD → clusters (deploy ms-* services)
+  { id: 'e-ado-clsnexus', source: 'azuredevops', target: 'cls-nexus', label: 'deploy ms-*', animated: true, style: { stroke: '#0ea5e9', strokeDasharray: '6 3' } },
+  { id: 'e-ado-clsbarr', source: 'azuredevops', target: 'cls-barramento', label: 'deploy ms-barramento', animated: true, style: { stroke: '#0ea5e9', strokeDasharray: '6 3' } },
+  { id: 'e-ado-clsobs', source: 'azuredevops', target: 'cls-obs', label: 'deploy observ.', animated: true, style: { stroke: '#0ea5e9', strokeDasharray: '6 3' } },
+  // Azure DevOps → buckets (upload MFE assets)
+  { id: 'e-ado-bucketshell', source: 'azuredevops', target: 'bucket-shell', label: 'upload 6 MFEs', style: { stroke: '#0ea5e9', strokeDasharray: '6 3' } },
 ];
 
 export function NexusDiagram() {
@@ -277,11 +308,13 @@ export function NexusDiagram() {
             <div className="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-[10px] font-bold border border-yellow-500/30">6 MFEs (unified)</div>
             <div className="px-2 py-1 bg-orange-500/20 text-orange-400 rounded text-[10px] font-bold border border-orange-500/30">9 ms-* APIs</div>
             <div className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-[10px] font-bold border border-purple-500/30">api-gateway-dev</div>
+            <div className="px-2 py-1 bg-lime-500/20 text-lime-400 rounded text-[10px] font-bold border border-lime-500/30">AJD Database</div>
+            <div className="px-2 py-1 bg-sky-500/20 text-sky-400 rounded text-[10px] font-bold border border-sky-500/30">Azure DevOps CI/CD</div>
           </div>
         </Panel>
 
         <Panel position="bottom-right" className="bg-zinc-900/80 p-4 rounded-xl border border-white/10 text-[10px] font-mono text-zinc-500 m-4">
-          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.11 | unified-gw | 9-ms-integrated
+          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.11 | unified-gw | 9-ms-integrated | AJD-db | 11-nexus-routes | azure-devops-ci
         </Panel>
 
         <Controls className="bg-zinc-800 border-zinc-700 !fill-white" />
