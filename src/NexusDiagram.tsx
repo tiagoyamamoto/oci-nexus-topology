@@ -105,7 +105,7 @@ const initialNodes: Node[] = [
     parentId: 'grp-shared',
     position: { x: 90, y: 210 },
     type: 'topology',
-    data: { resource: { name: 'Test_Crivo_Dev (LB)', type: 'loadbalancer', details: '10.8.4.127 | crivo_routes', status: 'active' } },
+    data: { resource: { name: 'Test_Crivo_Dev (LB)', type: 'loadbalancer', details: '10.8.4.127 | PRIVATE | routing: mfe-shell-dev-oci + api-gateway-dev + ms-* → 10.6.0.181', status: 'active' } },
   },
   {
     id: 'drg',
@@ -258,10 +258,11 @@ const initialEdges: Edge[] = [
   // Internet → Cloudflare
   { id: 'e-int-cf', source: 'internet', target: 'cloudflare', animated: true, type: 'smoothstep', style: { stroke: '#fff' } },
 
-  // Cloudflare → FortiGate → LB Crivo → api-gateway-dev
-  { id: 'e-cf-fortigate', source: 'cloudflare', target: 'fortigate', label: 'api-gateway-dev.invista.com.br', animated: true, type: 'smoothstep' },
+  // Cloudflare → FortiGate → Test_Crivo_Dev (routing por Host header) → api-gateway-dev
+  // mfe-shell-dev-oci + api-gateway-dev + ms-* (CNAME proxied → bqdgz22e5...)
+  { id: 'e-cf-fortigate', source: 'cloudflare', target: 'fortigate', label: 'CNAME proxied (mfe/ms-*)', animated: true, type: 'smoothstep' },
   { id: 'e-fortigate-lb', source: 'fortigate', target: 'lb-crivo-dev', animated: true, type: 'smoothstep' },
-  { id: 'e-lb-apigwdev', source: 'lb-crivo-dev', target: 'apigw-dev', label: 'bs-api-gateway-dev', animated: true, type: 'smoothstep' },
+  { id: 'e-lb-apigwdev', source: 'lb-crivo-dev', target: 'apigw-dev', label: 'crivo_routes → 10.6.0.181:443', animated: true, type: 'smoothstep' },
 
   // api-gateway-dev → 6 MFE buckets (deploy-mfe-unified-dev)
   // smoothstep evita sobreposição de linhas paralelas

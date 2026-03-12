@@ -25,7 +25,7 @@ export const nexusTopology: OCIResource[] = [
 
     // Shared — FortiGate + LB
     { id: 'fortigate', name: 'FortiGate', type: 'gateway', details: '129.148.17.8 (Public IP) | SBNT-PUBLIC-SHARED', status: 'active' },
-    { id: 'lb-crivo-dev', name: 'Test_Crivo_Dev (LB)', type: 'loadbalancer', details: '10.8.4.127 (Private) | SBNT-LB-SHARED | crivo_routes', status: 'active' },
+    { id: 'lb-crivo-dev', name: 'Test_Crivo_Dev (LB)', type: 'loadbalancer', details: '10.8.4.127 | PRIVATE | cmp-shared-inv | crivo_routes: mfe-shell-dev-oci + api-gateway-dev + ms-* → 10.6.0.181', status: 'active' },
 
     // Clusters OKE (cmp-dev-nexus) — todos v1.34.1 | 3 nodes
     { id: 'cls-nexus', name: 'cls-dev-nexus', type: 'cluster', details: 'v1.34.1 | 3 Nodes | nexus-services namespace', status: 'active' },
