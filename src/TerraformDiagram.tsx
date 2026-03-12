@@ -33,19 +33,21 @@ const initialNodes: Node[] = [
         data: { label: 'Compartment: cmp-dev-nexus', color: '#ef4444' },
     },
     {
+        // grp-data: 3 colunas × 1 linha | col-gap=270px | padding=50px
         id: 'grp-data',
         type: 'compartment',
         parentId: 'grp-nexus',
         position: { x: 40, y: 60 },
-        style: { width: 850, height: 300, backgroundColor: 'rgba(56, 189, 248, 0.05)', border: '1px dashed #38bdf8', borderRadius: '12px' },
+        style: { width: 880, height: 250, backgroundColor: 'rgba(56, 189, 248, 0.05)', border: '1px dashed #38bdf8', borderRadius: '12px' },
         data: { label: 'Data Services (Privados)', color: '#38bdf8' },
     },
     {
+        // grp-security: 1 coluna × 2 linhas | row-gap=140px | padding=60px
         id: 'grp-security',
         type: 'compartment',
         parentId: 'grp-nexus',
-        position: { x: 950, y: 60 },
-        style: { width: 400, height: 300, backgroundColor: 'rgba(250, 204, 21, 0.05)', border: '1px dashed #facc15', borderRadius: '12px' },
+        position: { x: 980, y: 60 },
+        style: { width: 360, height: 360, backgroundColor: 'rgba(250, 204, 21, 0.05)', border: '1px dashed #facc15', borderRadius: '12px' },
         data: { label: 'Security & Storage', color: '#facc15' },
     },
     {
@@ -57,30 +59,30 @@ const initialNodes: Node[] = [
         data: { label: 'OKE Clusters (Nexus/Bus/O11y)', color: '#a855f7' },
     },
 
-    // DATA SERVICES (Top Left Wide)
+    // DATA SERVICES — grp-data: col-gap=270px | x=50,320,590 | y=90
     {
         id: 'tf_postgresql',
         parentId: 'grp-data',
-        position: { x: 40, y: 80 },
+        position: { x: 50, y: 90 },
         type: 'topology',
         data: { resource: terraformTopology.find(r => r.id === 'tf_postgresql') },
     },
     {
         id: 'tf_redis',
         parentId: 'grp-data',
-        position: { x: 300, y: 80 },
+        position: { x: 320, y: 90 },
         type: 'topology',
         data: { resource: terraformTopology.find(r => r.id === 'tf_redis') },
     },
     {
         id: 'tf_adj',
         parentId: 'grp-data',
-        position: { x: 570, y: 80 },
+        position: { x: 590, y: 90 },
         type: 'topology',
         data: { resource: terraformTopology.find(r => r.id === 'tf_adj') },
     },
 
-    // SECURITY & STORAGE (Top Right Tall)
+    // SECURITY & STORAGE — grp-security: col única x=60 | r0=80, r1=220
     {
         id: 'tf_vault',
         parentId: 'grp-security',
@@ -91,7 +93,7 @@ const initialNodes: Node[] = [
     {
         id: 'tf_bucket',
         parentId: 'grp-security',
-        position: { x: 60, y: 190 },
+        position: { x: 60, y: 220 },
         type: 'topology',
         data: { resource: terraformTopology.find(r => r.id === 'tf_bucket') },
     },
