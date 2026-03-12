@@ -341,8 +341,40 @@ export function NexusDiagram() {
           </div>
         </Panel>
 
+        <Panel position="bottom-left" className="bg-zinc-900/90 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-white m-4 shadow-2xl max-w-[420px]">
+          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2">URLs de Acesso — DEV</p>
+          <div className="flex flex-col gap-1 font-mono text-[10px]">
+            {[
+              { label: 'mfe-shell-dev-oci', url: 'https://mfe-shell-dev-oci.invista.com.br', note: 'MFE Shell' },
+              { label: 'api-gateway-dev', url: 'https://api-gateway-dev.invista.com.br', note: 'Gateway unificado' },
+              { label: 'ms-auth-external', url: 'https://ms-auth-external-dev-oci.invista.com.br', note: 'Auth' },
+              { label: 'ms-auth-sso', url: 'https://ms-auth-sso-dev-oci.invista.com.br', note: 'SSO' },
+              { label: 'ms-user', url: 'https://ms-user-dev-oci.invista.com.br', note: 'User' },
+              { label: 'ms-person', url: 'https://ms-person-dev-oci.invista.com.br', note: 'Person' },
+              { label: 'ms-poc', url: 'https://ms-poc-dev-oci.invista.com.br', note: 'PoC' },
+              { label: 'ms-belt', url: 'https://ms-belt-dev-oci.invista.com.br', note: 'Belt' },
+              { label: 'ms-notify', url: 'https://ms-notify-dev-oci.invista.com.br', note: 'Notify' },
+              { label: 'ms-parameters', url: 'https://ms-parameters-dev-oci.invista.com.br', note: 'Params' },
+              { label: 'ms-barramento', url: 'https://ms-barramento-dev-oci.invista.com.br', note: 'Barramento' },
+            ].map(({ label, url, note }) => (
+              <a
+                key={label}
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 px-2 py-1 rounded hover:bg-white/5 transition-colors group"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 group-hover:bg-emerald-300" />
+                <span className="text-zinc-300 group-hover:text-white truncate flex-1">{label}</span>
+                <span className="text-zinc-600 group-hover:text-zinc-400 shrink-0">{note}</span>
+              </a>
+            ))}
+          </div>
+          <p className="text-[9px] text-zinc-600 mt-2 font-mono">gateway: bqdgz22e5... | SBNT-DEV 10.6.0.181</p>
+        </Panel>
+
         <Panel position="bottom-right" className="bg-zinc-900/80 p-4 rounded-xl border border-white/10 text-[10px] font-mono text-zinc-500 m-4">
-          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.11 | unified-gw | 9-ms-integrated | AJD-db | 11-nexus-routes | azure-devops-ci
+          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.12 | unified-gw | 11-urls | 9-ms-integrated | AJD-db | azure-devops-ci
         </Panel>
 
         <Controls className="bg-zinc-800 border-zinc-700 !fill-white" />
