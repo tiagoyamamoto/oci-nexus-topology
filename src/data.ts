@@ -14,12 +14,14 @@ export const nexusTopology: OCIResource[] = [
     // CI/CD — Azure DevOps (externo)
     { id: 'azuredevops', name: 'Azure DevOps', type: 'box', details: 'CN-Squad / Invista FIDC - Nexus | Pipelines: ms-* + MFEs', status: 'active' },
 
-    // API Gateway — Nexus (Private, cmp-dev-nexus) — 11 deployments ATIVOS
-    // Rotas: /api/{auth,sso,user,user-internal,user-external,person,poc,role,commercial-manager,cache} + /mfe-shell
-    { id: 'apigw-nexus', name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'dnqe6ufr... (PRIVATE) | 11 routes ACTIVE | /api/{auth,sso,user,person,poc,role,...}', status: 'active' },
+    // API Gateway — Nexus (DELETED — consolidado em api-gateway-dev)
+    { id: 'apigw-nexus', name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'DELETED — consolidado em api-gateway-dev (deploy-mfe-unified-dev)', status: 'inactive' },
 
-    // API Gateway — Dev Unificado (Private, cmp-dev-inv) — deploy-mfe-unified-dev
-    { id: 'apigw-dev', name: 'api-gateway-dev', type: 'apigateway', details: 'bqdgz22e5... (PRIVATE) | 10.6.0.181 | deploy-mfe-unified-dev | MFEs + 9 ms-*', status: 'active' },
+    // API Gateway — Dev Unificado (Private, cmp-dev-inv, subnet SBNT-DEV 10.6.0.0/24)
+    // deploy-mfe-unified-dev: 21 rotas = /mfe-shell /mfe-auth /mfe-user /mfe-person /mfe-poc /mfe-formalization
+    //                                  + /ms-auth-external /ms-auth-sso /ms-belt /ms-notify /ms-parameters
+    //                                  + /ms-person /ms-poc /ms-user /ms-barramento
+    { id: 'apigw-dev', name: 'api-gateway-dev', type: 'apigateway', details: 'bqdgz22e5... | PRIVATE | SBNT-DEV (10.6.0.0/24) | cmp-dev-inv | 21 rotas: /mfe-*/ + /ms-*/', status: 'active' },
 
     // Shared — FortiGate + LB
     { id: 'fortigate', name: 'FortiGate', type: 'gateway', details: '129.148.17.8 (Public IP) | SBNT-PUBLIC-SHARED', status: 'active' },

@@ -182,19 +182,19 @@ const initialNodes: Node[] = [
     parentId: 'grp-dev-inv',
     position: { x: 840, y: 280 },
     type: 'topology',
-    data: { resource: { name: 'api-gateway-dev', type: 'apigateway', details: 'bqdgz22e5... (PRIVATE) | 10.6.0.181 | SBNT-DEV', status: 'active' } },
+    data: { resource: { name: 'api-gateway-dev', type: 'apigateway', details: 'bqdgz22e5... | PRIVATE | SBNT-DEV (10.6.0.0/24) | cmp-dev-inv | 21 rotas: /mfe-*/ + /ms-*/', status: 'active' } },
   },
 
   // ─── cmp-dev-nexus (grp-nexus) ────────────────────────────────────────────
   // Grid: c0=50 | c1=280 | c2=510  ·  r0=60 | r1=210 | r2=360 | r3=510 | r4=660
   // Spans: c0→230px, c1→460px, c2→690px | gaps ≥50px entre colunas
   {
-    // r0 — centrado em c1 (280)
+    // r0 — centrado em c1 (280) — DELETED: migrado para api-gateway-dev unificado em cmp-dev-inv
     id: 'apigw-nexus',
     parentId: 'grp-nexus',
     position: { x: 280, y: 60 },
     type: 'topology',
-    data: { resource: { name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'dnqe6ufr... (PRIVATE) | 11 routes ACTIVE | /api/{auth,sso,user,person,poc,role,cache,...}', status: 'active' } },
+    data: { resource: { name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'DELETED — consolidado em api-gateway-dev (deploy-mfe-unified-dev)', status: 'inactive' } },
   },
   {
     // r1 — c0
@@ -286,8 +286,8 @@ const initialEdges: Edge[] = [
   { id: 'e-drg-vcnoke', source: 'drg', target: 'vcn-oke', label: 'ATT-VCN-OKE-DEV', type: 'smoothstep' },
   { id: 'e-drg-vcndev', source: 'drg', target: 'vcn-dev', label: 'ATT-VCN-DEV', type: 'smoothstep' },
 
-  // VCN-DEV → api-gateway-nexus-dev
-  { id: 'e-vcndev-apigwnexus', source: 'vcn-dev', target: 'apigw-nexus', type: 'smoothstep' },
+  // VCN-DEV (SBNT-DEV) → api-gateway-dev (unificado: MFEs + ms-*)
+  { id: 'e-vcndev-apigwdev', source: 'vcn-dev', target: 'apigw-dev', label: 'SBNT-DEV', type: 'smoothstep' },
 
   // VCN OKE → clusters
   { id: 'e-vcnoke-clsnexus', source: 'vcn-oke', target: 'cls-nexus', type: 'smoothstep' },
