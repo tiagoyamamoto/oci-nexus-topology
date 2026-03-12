@@ -1,10 +1,12 @@
+import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { NexusDiagram } from './NexusDiagram';
 import { TerraformDiagram } from './TerraformDiagram';
+import { LoginPage } from './LoginPage';
 import { cn } from './lib/utils';
-import { Layers, Terminal } from 'lucide-react';
+import { Layers, Terminal, LogOut } from 'lucide-react';
 
-function Navigation() {
+function Navigation({ onLogout }: { onLogout: () => void }) {
     const location = useLocation();
 
     return (
@@ -34,15 +36,36 @@ function Navigation() {
                 <Terminal className="w-4 h-4" />
                 Topologia Terraform
             </Link>
+
+            <button
+                onClick={onLogout}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-zinc-400 hover:text-white hover:bg-white/5 transition-all"
+                title="Sair"
+            >
+                <LogOut className="w-4 h-4" />
+            </button>
         </div>
     );
 }
 
 export default function App() {
+    const [authed, setAuthed] = useState(
+        () => sessionStorage.getItem('oci-topology-auth') === '1'
+    );
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('oci-topology-auth');
+        setAuthed(false);
+    };
+
+    if (!authed) {
+        return <LoginPage onLogin={() => setAuthed(true)} />;
+    }
+
     return (
         <BrowserRouter>
             <div className="w-screen h-screen bg-zinc-950 font-sans overflow-hidden">
-                <Navigation />
+                <Navigation onLogout={handleLogout} />
                 <Routes>
                     <Route path="/" element={<NexusDiagram />} />
                     <Route path="/terraform" element={<TerraformDiagram />} />
