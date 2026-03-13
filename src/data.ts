@@ -66,4 +66,10 @@ export const nexusTopology: OCIResource[] = [
 
     // Storage — Terraform State (cmp-dev-nexus, 3 buckets)
     { id: 'bucket-tfstate', name: 'tfstate-* (3 buckets)', type: 'bucket', details: 'tfstate-terraform | tfstate-gqysee | tfstate-inidhr', status: 'manual' },
+
+    // IAM & Security (cmp-dev-nexus & Root)
+    { id: 'domain-default', name: 'Identity Domain (Default)', type: 'shieldcheck', details: 'Root Tenancy | SSO Azure AD (SAML2) | JIT Provisioning', status: 'active' },
+    { id: 'domain-nexus', name: 'Identity Domain (Nexus)', type: 'shieldcheck', details: 'cmp-dev-nexus | App Auth (Confidential) | Usuarios: vinicius, userteste', status: 'active' },
+    { id: 'vault-nexus', name: 'Vault (nexus-api-dev)', type: 'shieldcheck', details: 'KMS | Key: key-nexus-dev | manage secrets/bundles', status: 'active' },
+    { id: 'sa-terraform', name: 'svc-terraform', type: 'box', details: 'IAM Service Account | manage all-resources in tenancy | Admin Policy', status: 'active' },
 ];

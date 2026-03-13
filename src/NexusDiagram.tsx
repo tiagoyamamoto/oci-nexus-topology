@@ -70,40 +70,50 @@ const initialNodes: Node[] = [
     style: { width: 760, height: 970, backgroundColor: 'rgba(239, 68, 68, 0.05)', border: '2px dashed #ef4444', borderRadius: '12px', overflow: 'visible' },
     data: { label: 'Sub-Compartment: cmp-dev-nexus', color: '#ef4444' },
   },
+  {
+    // grp-iam-nexus: 2 colunas × 2 linhas | col-gap=330px | row-gap=140px
+    id: 'grp-iam-nexus',
+    type: 'compartment',
+    parentId: 'grp-dev-inv',
+    position: { x: 30, y: 1510 },
+    style: { width: 980, height: 360, backgroundColor: 'rgba(56, 189, 248, 0.05)', border: '2px dashed #38bdf8', borderRadius: '12px', overflow: 'hidden' },
+    data: { label: 'IAM & Security — cmp-dev-nexus (Vault / App Auth)', color: '#38bdf8' },
+  },
 
-  // ─── IAM — Identidade e Acesso ────────────────────────────────────────────
+  // ─── EXTERNOS ─────────────────────────────────────────────────────────────
+
   // Coluna única x=90 | linhas: y=60, y=200, y=340, y=480
   {
-    id: 'grp-iam',
+    id: 'grp-iam-root',
     type: 'compartment',
     position: { x: 1220, y: 80 },
     style: { width: 360, height: 560, backgroundColor: 'rgba(249, 115, 22, 0.05)', border: '2px dashed #f97316', borderRadius: '12px', overflow: 'hidden' },
-    data: { label: 'IAM — Tenancy Root  ⚠ não cmp-dev-nexus', color: '#f97316' },
+    data: { label: 'IAM — Tenancy Root (SSO / Federation)', color: '#f97316' },
   },
   {
     id: 'azure-ad',
-    parentId: 'grp-iam',
+    parentId: 'grp-iam-root',
     position: { x: 90, y: 60 },
     type: 'topology',
     data: { resource: { name: 'Azure Active Directory', type: 'shieldcheck', details: '[externo] IdP SAML2 | SSO corporativo para console OCI', status: 'active' } },
   },
   {
     id: 'idomain-default',
-    parentId: 'grp-iam',
+    parentId: 'grp-iam-root',
     position: { x: 90, y: 200 },
     type: 'topology',
     data: { resource: { name: 'Domain Default', type: 'shieldcheck', details: '[root tenancy] SAML2 + JIT Provisioning | idcs-6d98b1a3...', status: 'active' } },
   },
   {
     id: 'oke-groups',
-    parentId: 'grp-iam',
+    parentId: 'grp-iam-root',
     position: { x: 90, y: 340 },
     type: 'topology',
     data: { resource: { name: 'Grupos OKE', type: 'box', details: '[root tenancy] invista-oke-admin (manage) | invista-oke-dev (use) | invista-oke-readonly (read) — todos os clusters', status: 'active' } },
   },
   {
     id: 'svc-nexus-deploy',
-    parentId: 'grp-iam',
+    parentId: 'grp-iam-root',
     position: { x: 90, y: 480 },
     type: 'topology',
     data: { resource: { name: 'user_azurenexus_dev', type: 'box', details: '[root tenancy] Service Account — Azure Pipelines DEV | chave API OCI', status: 'active' } },
@@ -314,13 +324,28 @@ const initialNodes: Node[] = [
     type: 'topology',
     data: { resource: { name: 'NEXUS_DEV (Redis)', type: 'database', details: 'OCI Cache (Redis) | ACTIVE | sessoes e cache | MANUAL', status: 'active' } },
   },
+
+  // ─── grp-iam-nexus: linha 0 (y=70) cols x=60,390,720 ──────────────────
   {
-    // r5 — c2 — Identity Domain Nexus (IAM, aplicacao Nexus Dev Confidential)
     id: 'idomain-nexus',
-    parentId: 'grp-nexus',
-    position: { x: 510, y: 810 },
+    parentId: 'grp-iam-nexus',
+    position: { x: 60, y: 70 },
     type: 'topology',
-    data: { resource: { name: 'Domain Nexus', type: 'shieldcheck', details: '[cmp-dev-nexus] App: Nexus Dev (Confidential) | idcs-316fee6d... | autenticacao usuarios externos', status: 'active' } },
+    data: { resource: { name: 'Identity Domain (Nexus)', type: 'shieldcheck', details: '[cmp-dev-nexus] App Auth (Confidential) | Usuarios: vinicius, userteste', status: 'active' } },
+  },
+  {
+    id: 'vault-nexus-node',
+    parentId: 'grp-iam-nexus',
+    position: { x: 390, y: 70 },
+    type: 'topology',
+    data: { resource: { name: 'Vault (nexus-api-dev)', type: 'shieldcheck', details: '[cmp-dev-nexus] KMS | key-nexus-dev | manage secrets/bundles', status: 'active' } },
+  },
+  {
+    id: 'sa-tf-admin',
+    parentId: 'grp-iam-nexus',
+    position: { x: 720, y: 70 },
+    type: 'topology',
+    data: { resource: { name: 'svc-terraform', type: 'box', details: '[root tenancy] IAM Service Account | manage all-resources in tenancy | Admin Policy', status: 'active' } },
   },
 ];
 
@@ -456,7 +481,7 @@ export function NexusDiagram() {
         </Panel>
 
         <Panel position="bottom-right" className="bg-zinc-900/80 p-4 rounded-xl border border-white/10 text-[10px] font-mono text-zinc-500 m-4">
-          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.13 | unified-gw | 11-urls | 9-ms-integrated | 4-dbs | IAM: SAML2+JIT+DomainNexus+OKE-RBAC
+          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.13 | unified-gw | 11-urls | 9-ms-integrated | 4-dbs | IAM: SAML2+JIT+DomainNexus+OKE-RBAC | DEPLOY-OK
         </Panel>
 
         <Controls className="bg-zinc-800 border-zinc-700 !fill-white" />
