@@ -71,6 +71,44 @@ const initialNodes: Node[] = [
     data: { label: 'Sub-Compartment: cmp-dev-nexus', color: '#ef4444' },
   },
 
+  // ─── IAM — Identidade e Acesso ────────────────────────────────────────────
+  // Coluna única x=90 | linhas: y=60, y=200, y=340, y=480
+  {
+    id: 'grp-iam',
+    type: 'compartment',
+    position: { x: 1220, y: 80 },
+    style: { width: 360, height: 560, backgroundColor: 'rgba(249, 115, 22, 0.05)', border: '2px dashed #f97316', borderRadius: '12px', overflow: 'hidden' },
+    data: { label: 'IAM — Identidade e Acesso', color: '#f97316' },
+  },
+  {
+    id: 'azure-ad',
+    parentId: 'grp-iam',
+    position: { x: 90, y: 60 },
+    type: 'topology',
+    data: { resource: { name: 'Azure Active Directory', type: 'shieldcheck', details: 'External IdP — SAML2 | SSO corporativo', status: 'active' } },
+  },
+  {
+    id: 'idomain-default',
+    parentId: 'grp-iam',
+    position: { x: 90, y: 200 },
+    type: 'topology',
+    data: { resource: { name: 'Domain Default (root)', type: 'shieldcheck', details: 'SAML2 + JIT Provisioning | idcs-6d98b1a3...', status: 'active' } },
+  },
+  {
+    id: 'oke-groups',
+    parentId: 'grp-iam',
+    position: { x: 90, y: 340 },
+    type: 'topology',
+    data: { resource: { name: 'Grupos OKE (Terraform)', type: 'box', details: 'invista-oke-admin (manage) | invista-oke-dev (use) | invista-oke-readonly (read)', status: 'active' } },
+  },
+  {
+    id: 'svc-nexus-deploy',
+    parentId: 'grp-iam',
+    position: { x: 90, y: 480 },
+    type: 'topology',
+    data: { resource: { name: 'user_azurenexus_dev', type: 'box', details: 'Service Account — Azure Pipelines DEV | chave API OCI', status: 'active' } },
+  },
+
   // ─── EXTERNOS ─────────────────────────────────────────────────────────────
   {
     id: 'internet',
@@ -276,6 +314,14 @@ const initialNodes: Node[] = [
     type: 'topology',
     data: { resource: { name: 'NEXUS_DEV (Redis)', type: 'database', details: 'OCI Cache (Redis) | ACTIVE | sessoes e cache | MANUAL', status: 'active' } },
   },
+  {
+    // r5 — c2 — Identity Domain Nexus (IAM, aplicacao Nexus Dev Confidential)
+    id: 'idomain-nexus',
+    parentId: 'grp-nexus',
+    position: { x: 510, y: 810 },
+    type: 'topology',
+    data: { resource: { name: 'Domain Nexus', type: 'shieldcheck', details: 'App: Nexus Dev (Confidential) | idcs-316fee6d... | autenticacao usuarios externos', status: 'active' } },
+  },
 ];
 
 const initialEdges: Edge[] = [
@@ -329,6 +375,13 @@ const initialEdges: Edge[] = [
   { id: 'e-ado-clsobs', source: 'azuredevops', target: 'cls-obs', label: 'deploy observ.', animated: true, type: 'smoothstep', style: { stroke: '#0ea5e9', strokeDasharray: '6 3' } },
   // Azure DevOps → buckets (upload MFE assets)
   { id: 'e-ado-bucketshell', source: 'azuredevops', target: 'bucket-shell', label: 'upload 6 MFEs', type: 'smoothstep', style: { stroke: '#0ea5e9', strokeDasharray: '6 3' } },
+
+  // IAM — federacao e controle de acesso
+  { id: 'e-azad-idomaindefault', source: 'azure-ad', target: 'idomain-default', label: 'SAML2 IdP', animated: true, type: 'smoothstep', style: { stroke: '#f97316' } },
+  { id: 'e-idomaindefault-okegroups', source: 'idomain-default', target: 'oke-groups', label: 'SSO → grupos OCI', type: 'smoothstep', style: { stroke: '#f97316' } },
+  { id: 'e-okegroups-clsnexus', source: 'oke-groups', target: 'cls-nexus', label: 'RBAC', type: 'smoothstep', style: { stroke: '#f97316', strokeDasharray: '4 2' } },
+  { id: 'e-svcnexus-ado', source: 'svc-nexus-deploy', target: 'azuredevops', label: 'API Key', type: 'smoothstep', style: { stroke: '#f97316', strokeDasharray: '4 2' } },
+  { id: 'e-idomnexus-clsnexus', source: 'idomain-nexus', target: 'cls-nexus', label: 'Nexus Dev auth', type: 'smoothstep', style: { stroke: '#f97316', strokeDasharray: '4 2' } },
 ];
 
 export function NexusDiagram() {
@@ -366,6 +419,7 @@ export function NexusDiagram() {
             <div className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-[10px] font-bold border border-purple-500/30">api-gateway-dev</div>
             <div className="px-2 py-1 bg-lime-500/20 text-lime-400 rounded text-[10px] font-bold border border-lime-500/30">4 DBs (AJD+PgSQL×2+Redis)</div>
             <div className="px-2 py-1 bg-sky-500/20 text-sky-400 rounded text-[10px] font-bold border border-sky-500/30">Azure DevOps CI/CD</div>
+            <div className="px-2 py-1 bg-orange-500/20 text-orange-400 rounded text-[10px] font-bold border border-orange-500/30">IAM + SAML2 + SSO</div>
           </div>
         </Panel>
 
@@ -402,7 +456,7 @@ export function NexusDiagram() {
         </Panel>
 
         <Panel position="bottom-right" className="bg-zinc-900/80 p-4 rounded-xl border border-white/10 text-[10px] font-mono text-zinc-500 m-4">
-          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.13 | unified-gw | 11-urls | 9-ms-integrated | 4-dbs (AJD+PgSQL×2+Redis) | azure-devops-ci
+          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.13 | unified-gw | 11-urls | 9-ms-integrated | 4-dbs | IAM: SAML2+JIT+DomainNexus+OKE-RBAC
         </Panel>
 
         <Controls className="bg-zinc-800 border-zinc-700 !fill-white" />
