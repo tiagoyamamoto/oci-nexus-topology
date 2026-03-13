@@ -78,35 +78,35 @@ const initialNodes: Node[] = [
     type: 'compartment',
     position: { x: 1220, y: 80 },
     style: { width: 360, height: 560, backgroundColor: 'rgba(249, 115, 22, 0.05)', border: '2px dashed #f97316', borderRadius: '12px', overflow: 'hidden' },
-    data: { label: 'IAM — Identidade e Acesso', color: '#f97316' },
+    data: { label: 'IAM — Tenancy Root  ⚠ não cmp-dev-nexus', color: '#f97316' },
   },
   {
     id: 'azure-ad',
     parentId: 'grp-iam',
     position: { x: 90, y: 60 },
     type: 'topology',
-    data: { resource: { name: 'Azure Active Directory', type: 'shieldcheck', details: 'External IdP — SAML2 | SSO corporativo', status: 'active' } },
+    data: { resource: { name: 'Azure Active Directory', type: 'shieldcheck', details: '[externo] IdP SAML2 | SSO corporativo para console OCI', status: 'active' } },
   },
   {
     id: 'idomain-default',
     parentId: 'grp-iam',
     position: { x: 90, y: 200 },
     type: 'topology',
-    data: { resource: { name: 'Domain Default (root)', type: 'shieldcheck', details: 'SAML2 + JIT Provisioning | idcs-6d98b1a3...', status: 'active' } },
+    data: { resource: { name: 'Domain Default', type: 'shieldcheck', details: '[root tenancy] SAML2 + JIT Provisioning | idcs-6d98b1a3...', status: 'active' } },
   },
   {
     id: 'oke-groups',
     parentId: 'grp-iam',
     position: { x: 90, y: 340 },
     type: 'topology',
-    data: { resource: { name: 'Grupos OKE (Terraform)', type: 'box', details: 'invista-oke-admin (manage) | invista-oke-dev (use) | invista-oke-readonly (read)', status: 'active' } },
+    data: { resource: { name: 'Grupos OKE', type: 'box', details: '[root tenancy] invista-oke-admin (manage) | invista-oke-dev (use) | invista-oke-readonly (read) — todos os clusters', status: 'active' } },
   },
   {
     id: 'svc-nexus-deploy',
     parentId: 'grp-iam',
     position: { x: 90, y: 480 },
     type: 'topology',
-    data: { resource: { name: 'user_azurenexus_dev', type: 'box', details: 'Service Account — Azure Pipelines DEV | chave API OCI', status: 'active' } },
+    data: { resource: { name: 'user_azurenexus_dev', type: 'box', details: '[root tenancy] Service Account — Azure Pipelines DEV | chave API OCI', status: 'active' } },
   },
 
   // ─── EXTERNOS ─────────────────────────────────────────────────────────────
@@ -320,7 +320,7 @@ const initialNodes: Node[] = [
     parentId: 'grp-nexus',
     position: { x: 510, y: 810 },
     type: 'topology',
-    data: { resource: { name: 'Domain Nexus', type: 'shieldcheck', details: 'App: Nexus Dev (Confidential) | idcs-316fee6d... | autenticacao usuarios externos', status: 'active' } },
+    data: { resource: { name: 'Domain Nexus', type: 'shieldcheck', details: '[cmp-dev-nexus] App: Nexus Dev (Confidential) | idcs-316fee6d... | autenticacao usuarios externos', status: 'active' } },
   },
 ];
 
