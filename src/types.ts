@@ -5,7 +5,7 @@ export interface OCIResource {
     name: string;
     type: ResourceType;
     details: string;
-    status: 'active' | 'warning' | 'pending' | 'manual';
+    status: 'active' | 'warning' | 'pending' | 'manual' | 'inactive';
     metrics?: {
         label: string;
         value: string;

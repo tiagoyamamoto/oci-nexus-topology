@@ -30,6 +30,7 @@ const statusColors = {
     warning: 'border-amber-500 bg-amber-50 text-amber-700 dark:bg-amber-950/20 dark:text-amber-400',
     pending: 'border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950/20 dark:text-blue-400',
     manual: 'border-indigo-500 bg-indigo-50 text-indigo-700 dark:bg-indigo-950/20 dark:text-indigo-400',
+    inactive: 'border-zinc-500 bg-zinc-50 text-zinc-500 dark:bg-zinc-900/40 dark:text-zinc-500 opacity-50',
 };
 
 export const TopologyNode = ({ data }: { data: TopologyNodeData }) => {

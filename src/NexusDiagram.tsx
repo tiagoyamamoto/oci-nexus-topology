@@ -49,7 +49,7 @@ const initialNodes: Node[] = [
     id: 'grp-dev-inv',
     type: 'compartment',
     position: { x: 50, y: 220 },
-    style: { width: 1090, height: 1390, backgroundColor: 'rgba(168, 85, 247, 0.05)', border: '2px dashed #a855f7', borderRadius: '12px', overflow: 'visible' },
+    style: { width: 1090, height: 1550, backgroundColor: 'rgba(168, 85, 247, 0.05)', border: '2px dashed #a855f7', borderRadius: '12px', overflow: 'visible' },
     data: { label: 'Compartment: cmp-dev-inv', color: '#a855f7' },
   },
   {
@@ -57,7 +57,7 @@ const initialNodes: Node[] = [
     id: 'grp-buckets',
     type: 'compartment',
     parentId: 'grp-dev-inv',
-    position: { x: 30, y: 1000 },
+    position: { x: 30, y: 1130 },
     style: { width: 980, height: 360, backgroundColor: 'rgba(20, 184, 166, 0.05)', border: '2px dashed #14b8a6', borderRadius: '12px', overflow: 'hidden' },
     data: { label: 'OCI Object Storage — MFE Assets (cmp-dev-nexus)', color: '#14b8a6' },
   },
@@ -67,7 +67,7 @@ const initialNodes: Node[] = [
     type: 'compartment',
     parentId: 'grp-dev-inv',
     position: { x: 30, y: 150 },
-    style: { width: 760, height: 800, backgroundColor: 'rgba(239, 68, 68, 0.05)', border: '2px dashed #ef4444', borderRadius: '12px', overflow: 'visible' },
+    style: { width: 760, height: 970, backgroundColor: 'rgba(239, 68, 68, 0.05)', border: '2px dashed #ef4444', borderRadius: '12px', overflow: 'visible' },
     data: { label: 'Sub-Compartment: cmp-dev-nexus', color: '#ef4444' },
   },
 
@@ -245,12 +245,36 @@ const initialNodes: Node[] = [
     data: { resource: { name: 'LB barramento', type: 'loadbalancer', details: '10.110.139.53 | nginx-internal | ms-barramento', status: 'active' } },
   },
   {
-    // r4 — centrado em c1 (280)
-    id: 'db-nexus',
+    // r4 — c0 — Autonomous JSON DB
+    id: 'db-atp',
+    parentId: 'grp-nexus',
+    position: { x: 50, y: 660 },
+    type: 'topology',
+    data: { resource: { name: 'NEXUS_DEV (AJD)', type: 'database', details: 'Autonomous JSON DB | AVAILABLE | serverless | db-name: nexusdbdev', status: 'active' } },
+  },
+  {
+    // r4 — c1 — PostgreSQL ms-nexus
+    id: 'db-pg-nexus',
     parentId: 'grp-nexus',
     position: { x: 280, y: 660 },
     type: 'topology',
-    data: { resource: { name: 'nexus-dev (AJD)', type: 'database', details: 'Autonomous JSON Database | AVAILABLE | 19c', status: 'active' } },
+    data: { resource: { name: 'NEXUS_DEV (PostgreSQL)', type: 'database', details: 'PostgreSQL | ACTIVE | banco relacional ms-nexus | MANUAL', status: 'active' } },
+  },
+  {
+    // r4 — c2 — PostgreSQL ms-barramento
+    id: 'db-pg-barramento',
+    parentId: 'grp-nexus',
+    position: { x: 510, y: 660 },
+    type: 'topology',
+    data: { resource: { name: 'BARRAMENTO_DEV (PostgreSQL)', type: 'database', details: 'PostgreSQL | ACTIVE | banco relacional ms-barramento | MANUAL', status: 'active' } },
+  },
+  {
+    // r5 — c1 centrado — Redis
+    id: 'db-redis',
+    parentId: 'grp-nexus',
+    position: { x: 280, y: 810 },
+    type: 'topology',
+    data: { resource: { name: 'NEXUS_DEV (Redis)', type: 'database', details: 'OCI Cache (Redis) | ACTIVE | sessoes e cache | MANUAL', status: 'active' } },
   },
 ];
 
@@ -280,8 +304,12 @@ const initialEdges: Edge[] = [
   { id: 'e-lbbarr-clsbarr', source: 'lb-barramento-node', target: 'cls-barramento', label: 'integration-hub', type: 'smoothstep', style: { stroke: '#f97316' } },
   { id: 'e-lbobserv-clsobs', source: 'lb-observ-node', target: 'cls-obs', label: 'observ.', type: 'smoothstep', style: { stroke: '#6366f1' } },
 
-  // cls-dev-nexus → AJD Database
-  { id: 'e-clsnexus-db', source: 'cls-nexus', target: 'db-nexus', label: 'AJD', type: 'smoothstep', style: { stroke: '#84cc16' } },
+  // cls-dev-nexus → Databases (AJD + PostgreSQL + Redis)
+  { id: 'e-clsnexus-dbatp', source: 'cls-nexus', target: 'db-atp', label: 'AJD', type: 'smoothstep', style: { stroke: '#84cc16' } },
+  { id: 'e-clsnexus-dbpg', source: 'cls-nexus', target: 'db-pg-nexus', label: 'PgSQL', type: 'smoothstep', style: { stroke: '#84cc16' } },
+  { id: 'e-clsnexus-dbredis', source: 'cls-nexus', target: 'db-redis', label: 'Redis', type: 'smoothstep', style: { stroke: '#84cc16' } },
+  // cls-dev-barramento → PostgreSQL barramento
+  { id: 'e-clsbarr-dbpgbarr', source: 'cls-barramento', target: 'db-pg-barramento', label: 'PgSQL', type: 'smoothstep', style: { stroke: '#84cc16' } },
 
   // DRG → VCNs
   { id: 'e-drg-vcnoke', source: 'drg', target: 'vcn-oke', label: 'ATT-VCN-OKE-DEV', type: 'smoothstep' },
@@ -336,7 +364,7 @@ export function NexusDiagram() {
             <div className="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-[10px] font-bold border border-yellow-500/30">6 MFEs (unified)</div>
             <div className="px-2 py-1 bg-orange-500/20 text-orange-400 rounded text-[10px] font-bold border border-orange-500/30">9 ms-* APIs</div>
             <div className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-[10px] font-bold border border-purple-500/30">api-gateway-dev</div>
-            <div className="px-2 py-1 bg-lime-500/20 text-lime-400 rounded text-[10px] font-bold border border-lime-500/30">AJD Database</div>
+            <div className="px-2 py-1 bg-lime-500/20 text-lime-400 rounded text-[10px] font-bold border border-lime-500/30">4 DBs (AJD+PgSQL×2+Redis)</div>
             <div className="px-2 py-1 bg-sky-500/20 text-sky-400 rounded text-[10px] font-bold border border-sky-500/30">Azure DevOps CI/CD</div>
           </div>
         </Panel>
@@ -374,7 +402,7 @@ export function NexusDiagram() {
         </Panel>
 
         <Panel position="bottom-right" className="bg-zinc-900/80 p-4 rounded-xl border border-white/10 text-[10px] font-mono text-zinc-500 m-4">
-          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.12 | unified-gw | 11-urls | 9-ms-integrated | AJD-db | azure-devops-ci
+          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.13 | unified-gw | 11-urls | 9-ms-integrated | 4-dbs (AJD+PgSQL×2+Redis) | azure-devops-ci
         </Panel>
 
         <Controls className="bg-zinc-800 border-zinc-700 !fill-white" />

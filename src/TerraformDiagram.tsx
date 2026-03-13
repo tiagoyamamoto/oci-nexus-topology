@@ -223,7 +223,7 @@ export function TerraformDiagram() {
 
                     <div className="mt-4 flex gap-2">
                         <div className="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-[10px] font-bold border border-yellow-500/30">Vault Injection</div>
-                        <div className="px-2 py-1 bg-sky-500/20 text-sky-400 rounded text-[10px] font-bold border border-sky-500/30">Managed DBs</div>
+                        <div className="px-2 py-1 bg-sky-500/20 text-sky-400 rounded text-[10px] font-bold border border-sky-500/30">DBs Manuais</div>
                     </div>
                 </Panel>
 

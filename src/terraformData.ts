@@ -8,10 +8,10 @@ export const terraformTopology: OCIResource[] = [
     // API Gateway Layer
     { id: 'tf_apigw', name: 'API Gateway (Shared)', type: 'apigateway', details: 'api_gateway_mfe.tf', status: 'active' },
 
-    // Databases Layer
-    { id: 'tf_postgresql', name: 'PostgreSQL', type: 'database', details: 'postgresql.tf - Managed DB', status: 'active' },
-    { id: 'tf_redis', name: 'Redis Cluster', type: 'database', details: 'redis.tf - Distributed Cache', status: 'active' },
-    { id: 'tf_adj', name: 'Autonomous JSON DB', type: 'database', details: 'autonomous_json.tf', status: 'active' },
+    // Databases Layer — todos MANUAIS (criados via console OCI, não provisionados pelo Terraform)
+    { id: 'tf_postgresql', name: 'PostgreSQL', type: 'database', details: 'postgresql.tf | MANUAL — NEXUS_DEV + BARRAMENTO_DEV | cmp-dev-nexus', status: 'manual' },
+    { id: 'tf_redis', name: 'Redis Cluster', type: 'database', details: 'redis.tf | MANUAL — NEXUS_DEV (OCI Cache) | cmp-dev-nexus', status: 'manual' },
+    { id: 'tf_adj', name: 'Autonomous JSON DB', type: 'database', details: 'autonomous_json.tf | MANUAL — NEXUS_DEV (AJD) | db-name: nexusdbdev', status: 'manual' },
 
     // OKE Clusters Layer
     { id: 'tf_cls_nexus', name: 'OKE Nexus', type: 'cluster', details: 'oke_cluster.tf - Main Workloads', status: 'active' },

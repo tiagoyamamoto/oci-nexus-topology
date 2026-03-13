@@ -39,8 +39,11 @@ export const nexusTopology: OCIResource[] = [
     { id: 'lb-barramento', name: 'LB barramento', type: 'loadbalancer', details: '10.110.139.53 | PRIVATE | nginx-internal | ms-barramento', status: 'active' },
     { id: 'lb-observ', name: 'LB observabilidade', type: 'loadbalancer', details: '10.110.136.228 | PRIVATE | cls-dev-observabilidade', status: 'active' },
 
-    // Database — Autonomous JSON Database (cmp-dev-nexus)
-    { id: 'db-nexus', name: 'nexus-dev (AJD)', type: 'database', details: 'Autonomous JSON Database | AVAILABLE | 19c | cmp-dev-nexus', status: 'active' },
+    // Databases (cmp-dev-nexus) — todos MANUAIS | padrao nomenclatura: NOME_AMBIENTE | verificado 2026-03-13
+    { id: 'db-atp', name: 'NEXUS_DEV (AJD)', type: 'database', details: 'Autonomous JSON DB | AVAILABLE | serverless auto-scaling | db-name: nexusdbdev | cmp-dev-nexus', status: 'active' },
+    { id: 'db-pg-nexus', name: 'NEXUS_DEV (PostgreSQL)', type: 'database', details: 'PostgreSQL | ACTIVE | banco relacional ms-nexus | cmp-dev-nexus', status: 'active' },
+    { id: 'db-pg-barramento', name: 'BARRAMENTO_DEV (PostgreSQL)', type: 'database', details: 'PostgreSQL | ACTIVE | banco relacional ms-barramento | cmp-dev-nexus', status: 'active' },
+    { id: 'db-redis', name: 'NEXUS_DEV (Redis)', type: 'database', details: 'OCI Cache (Redis) | ACTIVE | cmp-dev-nexus', status: 'active' },
 
     // ms-* API Services (OKE, routed via api-gateway-dev unified deployment)
     { id: 'ms-auth-external', name: 'ms-auth-external', type: 'cluster', details: '/ms-auth-external/ | nexus-services | cls-dev-nexus', status: 'active' },
