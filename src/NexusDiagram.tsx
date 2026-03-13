@@ -237,19 +237,19 @@ const initialNodes: Node[] = [
     parentId: 'grp-dev-inv',
     position: { x: 840, y: 280 },
     type: 'topology',
-    data: { resource: { name: 'api-gateway-dev', type: 'apigateway', details: 'bqdgz22e5... | PRIVATE | SBNT-DEV (10.6.0.0/24) | cmp-dev-inv | 21 rotas: /mfe-*/ + /ms-*/', status: 'active' } },
+    data: { resource: { name: 'api-gateway-dev', type: 'apigateway', details: 'bqdgz22e5haqac4vdb54isxrqm | PRIVATE | SBNT-DEV (10.6.0.0/24) | cmp-dev-inv | 1 deployment: deploy-mfe-unified-dev (/) → 6 MFE buckets Object Storage', status: 'active' } },
   },
 
   // ─── cmp-dev-nexus (grp-nexus) ────────────────────────────────────────────
   // Grid: c0=50 | c1=280 | c2=510  ·  r0=60 | r1=210 | r2=360 | r3=510 | r4=660
   // Spans: c0→230px, c1→460px, c2→690px | gaps ≥50px entre colunas
   {
-    // r0 — centrado em c1 (280) — ACTIVE: gateway PRIVATE em SBNT-DEV (10.6.0.0/24)
+    // r0 — centrado em c1 (280) — ACTIVE: gateway unificado MFEs + ms-*
     id: 'apigw-nexus',
     parentId: 'grp-nexus',
     position: { x: 280, y: 60 },
     type: 'topology',
-    data: { resource: { name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'dnqe6ufrommkqxtfp7k2ehrbmu | PRIVATE | SBNT-DEV (10.6.0.0/24) | MANUAL — não no TF', status: 'active' } },
+    data: { resource: { name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'dnqe6ufrommkqxtfp7k2ehrbmu | PRIVATE | SBNT-DEV (10.6.0.0/24) | 11 rotas: /mfe-shell + /api/auth,user,person,poc,sso,role,cache,commercial-manager,user-ext,user-int | MANUAL', status: 'active' } },
   },
   {
     // r1 — c0
@@ -299,12 +299,12 @@ const initialNodes: Node[] = [
     data: { resource: { name: 'LB barramento', type: 'loadbalancer', details: '10.110.139.53 | nginx-internal | ms-barramento', status: 'active' } },
   },
   {
-    // r3.5 — c1 — LB público (FortiGate VIP → api-gateway-nexus-dev)
+    // r3.5 — c2 — LB público (nginx-ingress do cls-dev-nexus via NodePort)
     id: 'lb-public-nexus',
     parentId: 'grp-nexus',
-    position: { x: 280, y: 130 },
+    position: { x: 510, y: 130 },
     type: 'topology',
-    data: { resource: { name: 'LB Público nexus', type: 'loadbalancer', details: '137.131.236.202 | PUBLIC | VIP FortiGate → api-gateway-nexus-dev | OKE-created', status: 'active' } },
+    data: { resource: { name: 'LB Público nexus', type: 'loadbalancer', details: '137.131.236.202 | PUBLIC | OKE-created (nginx-ingress) | NodePort 32283 (HTTPS) / 30236 (HTTP) → cls-dev-nexus', status: 'active' } },
   },
   {
     // r4 — c0 — Autonomous JSON DB
@@ -373,8 +373,11 @@ const initialEdges: Edge[] = [
   { id: 'e-fortigate-lb', source: 'fortigate', target: 'lb-crivo-dev', animated: true, type: 'smoothstep' },
   { id: 'e-lb-apigwdev', source: 'lb-crivo-dev', target: 'apigw-dev', label: 'crivo_routes → 10.6.0.181:443', animated: true, type: 'smoothstep' },
 
-  // LB público → api-gateway-nexus-dev (PRIVATE)
-  { id: 'e-lbpub-apigwnexus', source: 'lb-public-nexus', target: 'apigw-nexus', label: '137.131.236.202 → PRIVATE GW', animated: true, type: 'smoothstep', style: { stroke: '#f59e0b' } },
+  // LB público → cls-dev-nexus (nginx-ingress NodePort 32283/30236)
+  { id: 'e-lbpub-clsnexus', source: 'lb-public-nexus', target: 'cls-nexus', label: 'NodePort 32283/30236 (nginx-ingress)', animated: true, type: 'smoothstep', style: { stroke: '#f59e0b' } },
+
+  // api-gateway-nexus-dev → bucket-shell (deployment /mfe-shell)
+  { id: 'e-apigwnexus-shell', source: 'apigw-nexus', target: 'bucket-shell', label: '/mfe-shell', type: 'smoothstep', style: { stroke: '#f97316', strokeDasharray: '4 2' } },
 
   // api-gateway-dev → 6 MFE buckets (deploy-mfe-unified-dev)
   // smoothstep evita sobreposição de linhas paralelas
@@ -385,9 +388,9 @@ const initialEdges: Edge[] = [
   { id: 'e-apigwdev-poc', source: 'apigw-dev', target: 'bucket-poc', label: '/mfe-poc/', type: 'smoothstep' },
   { id: 'e-apigwdev-formalization', source: 'apigw-dev', target: 'bucket-formalization', label: '/mfe-formalization/', type: 'smoothstep' },
 
-  // api-gateway-dev → LBs internos → clusters
-  { id: 'e-apigwdev-lbnexusint', source: 'apigw-dev', target: 'lb-nexus-int', label: '8 ms-* routes', animated: true, type: 'smoothstep', style: { stroke: '#f97316' } },
-  { id: 'e-apigwdev-lbbarr', source: 'apigw-dev', target: 'lb-barramento-node', label: '/ms-barramento/', animated: true, type: 'smoothstep', style: { stroke: '#f97316' } },
+  // api-gateway-nexus-dev → LBs internos → clusters (ms-* routes — 10 rotas /api/*)
+  { id: 'e-apigwnexus-lbnexusint', source: 'apigw-nexus', target: 'lb-nexus-int', label: '/api/* (10 rotas ms-*)', animated: true, type: 'smoothstep', style: { stroke: '#f97316' } },
+  { id: 'e-apigwnexus-lbbarr', source: 'apigw-nexus', target: 'lb-barramento-node', label: '/api/commercial-manager', animated: true, type: 'smoothstep', style: { stroke: '#f97316' } },
   { id: 'e-lbnexusint-clsnexus', source: 'lb-nexus-int', target: 'cls-nexus', label: 'nexus-services', type: 'smoothstep', style: { stroke: '#f97316' } },
   { id: 'e-lbbarr-clsbarr', source: 'lb-barramento-node', target: 'cls-barramento', label: 'integration-hub', type: 'smoothstep', style: { stroke: '#f97316' } },
   { id: 'e-lbobserv-clsobs', source: 'lb-observ-node', target: 'cls-obs', label: 'observ.', type: 'smoothstep', style: { stroke: '#6366f1' } },
@@ -515,7 +518,7 @@ export function NexusDiagram() {
         </Panel>
 
         <Panel position="bottom-right" className="bg-zinc-900/80 p-4 rounded-xl border border-white/10 text-[10px] font-mono text-zinc-500 m-4">
-          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.13-r2 | apigw-nexus-ACTIVE | lb-public-137.131.236.202 | oke-clusters-2-updated | 4-dbs | ArgoCD: nexus+obs | barramento→cmp-dev-barramento | TF-missing: apigw+buckets | pipeline-NOvault-read
+          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.13-r3 | 2-apigw: nexus-dev(11routes/ms+mfe-shell) + dev(mfe-unified) | lb-pub-137.131.236.202→cls-nexus-NodePort | oke-clusters-2-fixed | 4-dbs | ArgoCD: nexus+obs
         </Panel>
 
         <Controls className="bg-zinc-800 border-zinc-700 !fill-white" />
