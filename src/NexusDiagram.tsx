@@ -39,6 +39,13 @@ const initialNodes: Node[] = [
     data: { label: 'cmp-shared-inv', color: '#3b82f6' },
   },
   {
+    id: 'grp-barramento',
+    type: 'compartment',
+    position: { x: 820, y: 620 },
+    style: { width: 360, height: 200, backgroundColor: 'rgba(34, 197, 94, 0.05)', border: '2px dashed #22c55e', borderRadius: '12px', overflow: 'hidden' },
+    data: { label: 'cmp-dev-barramento', color: '#22c55e' },
+  },
+  {
     id: 'grp-oke-dev',
     type: 'compartment',
     position: { x: 50, y: 50 },
@@ -237,12 +244,12 @@ const initialNodes: Node[] = [
   // Grid: c0=50 | c1=280 | c2=510  ·  r0=60 | r1=210 | r2=360 | r3=510 | r4=660
   // Spans: c0→230px, c1→460px, c2→690px | gaps ≥50px entre colunas
   {
-    // r0 — centrado em c1 (280) — DELETED: migrado para api-gateway-dev unificado em cmp-dev-inv
+    // r0 — centrado em c1 (280) — ACTIVE: gateway PRIVATE em SBNT-DEV (10.6.0.0/24)
     id: 'apigw-nexus',
     parentId: 'grp-nexus',
     position: { x: 280, y: 60 },
     type: 'topology',
-    data: { resource: { name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'DELETED — consolidado em api-gateway-dev (deploy-mfe-unified-dev)', status: 'inactive' } },
+    data: { resource: { name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'dnqe6ufrommkqxtfp7k2ehrbmu | PRIVATE | SBNT-DEV (10.6.0.0/24) | MANUAL — não no TF', status: 'active' } },
   },
   {
     // r1 — c0
@@ -250,15 +257,14 @@ const initialNodes: Node[] = [
     parentId: 'grp-nexus',
     position: { x: 50, y: 210 },
     type: 'topology',
-    data: { resource: { name: 'cls-dev-nexus', type: 'cluster', details: 'v1.34.1 | 3 Nodes | nexus-services', status: 'active' } },
+    data: { resource: { name: 'cls-dev-nexus', type: 'cluster', details: 'v1.34.1 | 3 Nodes | nexus-services | ArgoCD: 10.110.130.171', status: 'active' } },
   },
   {
-    // r1 — c2
     id: 'cls-barramento',
-    parentId: 'grp-nexus',
-    position: { x: 510, y: 210 },
+    parentId: 'grp-barramento',
+    position: { x: 90, y: 70 },
     type: 'topology',
-    data: { resource: { name: 'cls-dev-barramento', type: 'cluster', details: 'v1.34.1 | 3 Nodes | integration-hub', status: 'active' } },
+    data: { resource: { name: 'cls-dev-barramento', type: 'cluster', details: 'v1.34.1 | 3 Nodes | integration-hub | Movido 2026-03-13', status: 'active' } },
   },
   {
     // r2 — c1 (centrado)
@@ -266,7 +272,7 @@ const initialNodes: Node[] = [
     parentId: 'grp-nexus',
     position: { x: 280, y: 360 },
     type: 'topology',
-    data: { resource: { name: 'cls-dev-observabilidade', type: 'cluster', details: 'v1.34.1 | 3 Nodes | monitoring', status: 'active' } },
+    data: { resource: { name: 'cls-dev-observabilidade', type: 'cluster', details: 'v1.34.1 | 3 Nodes | monitoring | ArgoCD: 10.110.139.53', status: 'active' } },
   },
   {
     // r3 — c0 (abaixo de cls-nexus)
@@ -291,6 +297,14 @@ const initialNodes: Node[] = [
     position: { x: 510, y: 510 },
     type: 'topology',
     data: { resource: { name: 'LB barramento', type: 'loadbalancer', details: '10.110.139.53 | nginx-internal | ms-barramento', status: 'active' } },
+  },
+  {
+    // r3.5 — c1 — LB público (FortiGate VIP → api-gateway-nexus-dev)
+    id: 'lb-public-nexus',
+    parentId: 'grp-nexus',
+    position: { x: 280, y: 130 },
+    type: 'topology',
+    data: { resource: { name: 'LB Público nexus', type: 'loadbalancer', details: '137.131.236.202 | PUBLIC | VIP FortiGate → api-gateway-nexus-dev | OKE-created', status: 'active' } },
   },
   {
     // r4 — c0 — Autonomous JSON DB
@@ -358,6 +372,9 @@ const initialEdges: Edge[] = [
   { id: 'e-cf-fortigate', source: 'cloudflare', target: 'fortigate', label: 'CNAME proxied (mfe/ms-*)', animated: true, type: 'smoothstep' },
   { id: 'e-fortigate-lb', source: 'fortigate', target: 'lb-crivo-dev', animated: true, type: 'smoothstep' },
   { id: 'e-lb-apigwdev', source: 'lb-crivo-dev', target: 'apigw-dev', label: 'crivo_routes → 10.6.0.181:443', animated: true, type: 'smoothstep' },
+
+  // LB público → api-gateway-nexus-dev (PRIVATE)
+  { id: 'e-lbpub-apigwnexus', source: 'lb-public-nexus', target: 'apigw-nexus', label: '137.131.236.202 → PRIVATE GW', animated: true, type: 'smoothstep', style: { stroke: '#f59e0b' } },
 
   // api-gateway-dev → 6 MFE buckets (deploy-mfe-unified-dev)
   // smoothstep evita sobreposição de linhas paralelas
@@ -478,10 +495,27 @@ export function NexusDiagram() {
             ))}
           </div>
           <p className="text-[9px] text-zinc-600 mt-2 font-mono">gateway: bqdgz22e5... | SBNT-DEV 10.6.0.181</p>
+
+          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mt-3 mb-2">ArgoCD — DEV (VPN/Privado)</p>
+          <div className="flex flex-col gap-1 font-mono text-[10px]">
+            {[
+              { cluster: 'cls-dev-nexus', ip: '10.110.130.171', user: 'admin', pass: '-9WqS9LBnutB-LWC' },
+              { cluster: 'cls-dev-observabilidade', ip: '10.110.139.53', user: 'admin', pass: 'yUhkPqPB6ipp2Waj' },
+            ].map(({ cluster, ip, user, pass }) => (
+              <div key={cluster} className="px-2 py-1 rounded bg-white/5 flex flex-col gap-0.5">
+                <span className="text-emerald-400 font-bold">{cluster}</span>
+                <span className="text-zinc-400">https://{ip} &nbsp; user: <span className="text-white">{user}</span> &nbsp; pass: <span className="text-yellow-300">{pass}</span></span>
+              </div>
+            ))}
+            <div className="px-2 py-1 rounded bg-white/5 flex flex-col gap-0.5">
+              <span className="text-zinc-500 font-bold">cls-dev-barramento</span>
+              <span className="text-zinc-600">ArgoCD não instalado (cluster recriado 2026-03-13)</span>
+            </div>
+          </div>
         </Panel>
 
         <Panel position="bottom-right" className="bg-zinc-900/80 p-4 rounded-xl border border-white/10 text-[10px] font-mono text-zinc-500 m-4">
-          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.13 | unified-gw | 11-urls | 9-ms-integrated | 4-dbs | IAM: SAML2+JIT+DomainNexus+OKE-RBAC | DEPLOY-OK
+          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.13-r2 | apigw-nexus-ACTIVE | lb-public-137.131.236.202 | oke-clusters-2-updated | 4-dbs | ArgoCD: nexus+obs | barramento→cmp-dev-barramento | TF-missing: apigw+buckets | pipeline-NOvault-read
         </Panel>
 
         <Controls className="bg-zinc-800 border-zinc-700 !fill-white" />
