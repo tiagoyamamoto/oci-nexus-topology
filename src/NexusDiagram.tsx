@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import {
-  ReactFlow,
-  MiniMap,
-  Controls,
   Background,
+  Controls,
+  MiniMap,
   Panel,
+  ReactFlow,
   type Edge,
   type Node,
 } from '@xyflow/react';
@@ -13,291 +13,196 @@ import '@xyflow/react/dist/style.css';
 import { TopologyNode } from './TopologyNode';
 import { CompartmentNode } from './CompartmentNode';
 
-type ViewMode = 'executive' | 'technical';
-
 const nodeTypes = {
   topology: TopologyNode,
   compartment: CompartmentNode,
 };
 
+type ViewMode = 'executive' | 'technical';
+
 const initialNodes: Node[] = [
   {
-    id: 'grp-ado',
+    id: 'grp-edge',
     type: 'compartment',
-    position: { x: -760, y: 20 },
-    style: { width: 520, height: 1610, backgroundColor: 'rgba(14, 165, 233, 0.05)', border: '2px dashed #0ea5e9', borderRadius: '18px', overflow: 'visible' },
-    data: { label: 'Azure DevOps', color: '#0ea5e9' },
+    position: { x: -640, y: 30 },
+    style: { width: 520, height: 560, backgroundColor: 'rgba(14, 165, 233, 0.05)', border: '2px dashed #0ea5e9', borderRadius: '20px', overflow: 'visible' },
+    data: { label: 'Acesso e Entrega', color: '#0ea5e9' },
   },
   {
-    id: 'grp-ado-infra',
+    id: 'grp-network',
     type: 'compartment',
-    parentId: 'grp-ado',
-    position: { x: 24, y: 120 },
-    style: { width: 470, height: 240, backgroundColor: 'rgba(56, 189, 248, 0.05)', border: '1px dashed #38bdf8', borderRadius: '14px', overflow: 'visible' },
-    data: { label: 'Infra / Templates', color: '#38bdf8' },
+    position: { x: -640, y: 640 },
+    style: { width: 520, height: 360, backgroundColor: 'rgba(234, 179, 8, 0.05)', border: '2px dashed #eab308', borderRadius: '20px', overflow: 'visible' },
+    data: { label: 'Rede Compartilhada', color: '#eab308' },
   },
   {
-    id: 'grp-ado-mfe',
+    id: 'grp-automation',
     type: 'compartment',
-    parentId: 'grp-ado',
-    position: { x: 24, y: 390 },
-    style: { width: 470, height: 480, backgroundColor: 'rgba(20, 184, 166, 0.05)', border: '1px dashed #14b8a6', borderRadius: '14px', overflow: 'visible' },
-    data: { label: 'Repos MFE', color: '#14b8a6' },
-  },
-  {
-    id: 'grp-ado-ms',
-    type: 'compartment',
-    parentId: 'grp-ado',
-    position: { x: 24, y: 900 },
-    style: { width: 470, height: 450, backgroundColor: 'rgba(34, 197, 94, 0.05)', border: '1px dashed #22c55e', borderRadius: '14px', overflow: 'visible' },
-    data: { label: 'Repos MS', color: '#22c55e' },
-  },
-  {
-    id: 'grp-ado-vis',
-    type: 'compartment',
-    parentId: 'grp-ado',
-    position: { x: 24, y: 1380 },
-    style: { width: 470, height: 140, backgroundColor: 'rgba(244, 114, 182, 0.05)', border: '1px dashed #f472b6', borderRadius: '14px', overflow: 'visible' },
-    data: { label: 'Visualizacao', color: '#f472b6' },
-  },
-  {
-    id: 'grp-oke-dev',
-    type: 'compartment',
-    position: { x: -160, y: 20 },
-    style: { width: 430, height: 210, backgroundColor: 'rgba(234, 179, 8, 0.05)', border: '2px dashed #eab308', borderRadius: '18px', overflow: 'visible' },
-    data: { label: 'OKE > DEV', color: '#eab308' },
-  },
-  {
-    id: 'grp-dev-inv',
-    type: 'compartment',
-    position: { x: -210, y: 280 },
-    style: { width: 1280, height: 1910, backgroundColor: 'rgba(168, 85, 247, 0.05)', border: '2px dashed #a855f7', borderRadius: '18px', overflow: 'visible' },
-    data: { label: 'cmp-dev-inv', color: '#a855f7' },
+    position: { x: 1760, y: 30 },
+    style: { width: 540, height: 930, backgroundColor: 'rgba(99, 102, 241, 0.05)', border: '2px dashed #6366f1', borderRadius: '20px', overflow: 'visible' },
+    data: { label: 'Governança e Automação', color: '#6366f1' },
   },
   {
     id: 'grp-nexus',
     type: 'compartment',
-    parentId: 'grp-dev-inv',
-    position: { x: 30, y: 150 },
-    style: { width: 860, height: 980, backgroundColor: 'rgba(239, 68, 68, 0.05)', border: '2px dashed #ef4444', borderRadius: '16px', overflow: 'visible' },
-    data: { label: 'cmp-dev-nexus', color: '#ef4444' },
+    position: { x: -40, y: 30 },
+    style: { width: 1720, height: 1380, backgroundColor: 'rgba(239, 68, 68, 0.05)', border: '2px dashed #ef4444', borderRadius: '24px', overflow: 'visible' },
+    data: { label: 'cmp-dev-nexus | Runtime unificado', color: '#ef4444' },
   },
   {
-    id: 'grp-buckets',
+    id: 'grp-platform',
     type: 'compartment',
-    parentId: 'grp-dev-inv',
-    position: { x: 30, y: 1170 },
-    style: { width: 1160, height: 420, backgroundColor: 'rgba(20, 184, 166, 0.05)', border: '2px dashed #14b8a6', borderRadius: '16px', overflow: 'visible' },
-    data: { label: 'Object Storage / MFE Assets', color: '#14b8a6' },
+    parentId: 'grp-nexus',
+    position: { x: 36, y: 90 },
+    style: { width: 780, height: 430, backgroundColor: 'rgba(168, 85, 247, 0.06)', border: '1px dashed #a855f7', borderRadius: '18px', overflow: 'visible' },
+    data: { label: 'Plataforma OKE Atual', color: '#a855f7' },
   },
   {
-    id: 'grp-iam-nexus',
+    id: 'grp-data',
     type: 'compartment',
-    parentId: 'grp-dev-inv',
-    position: { x: 30, y: 1630 },
-    style: { width: 1160, height: 220, backgroundColor: 'rgba(56, 189, 248, 0.05)', border: '2px dashed #38bdf8', borderRadius: '16px', overflow: 'visible' },
-    data: { label: 'IAM / Vault / App Auth', color: '#38bdf8' },
+    parentId: 'grp-nexus',
+    position: { x: 840, y: 90 },
+    style: { width: 840, height: 430, backgroundColor: 'rgba(34, 197, 94, 0.06)', border: '1px dashed #22c55e', borderRadius: '18px', overflow: 'visible' },
+    data: { label: 'Dados Persistentes', color: '#22c55e' },
   },
   {
-    id: 'grp-shared',
+    id: 'grp-storage',
     type: 'compartment',
-    position: { x: 1120, y: 40 },
-    style: { width: 430, height: 520, backgroundColor: 'rgba(59, 130, 246, 0.05)', border: '2px dashed #3b82f6', borderRadius: '18px', overflow: 'visible' },
-    data: { label: 'cmp-shared-inv', color: '#3b82f6' },
-  },
-  {
-    id: 'grp-barramento',
-    type: 'compartment',
-    position: { x: 1120, y: 620 },
-    style: { width: 720, height: 250, backgroundColor: 'rgba(34, 197, 94, 0.05)', border: '2px dashed #22c55e', borderRadius: '18px', overflow: 'visible' },
-    data: { label: 'ms-barramento', color: '#22c55e' },
+    parentId: 'grp-nexus',
+    position: { x: 36, y: 560 },
+    style: { width: 1644, height: 360, backgroundColor: 'rgba(20, 184, 166, 0.06)', border: '1px dashed #14b8a6', borderRadius: '18px', overflow: 'visible' },
+    data: { label: 'Buckets e Estado Terraform', color: '#14b8a6' },
   },
   {
     id: 'grp-legacy',
     type: 'compartment',
-    position: { x: 1120, y: 930 },
-    style: { width: 430, height: 220, backgroundColor: 'rgba(113, 113, 122, 0.08)', border: '2px dashed #71717a', borderRadius: '18px', overflow: 'visible' },
-    data: { label: 'Legacy / Desativado', color: '#71717a' },
+    parentId: 'grp-nexus',
+    position: { x: 36, y: 960 },
+    style: { width: 1644, height: 210, backgroundColor: 'rgba(113, 113, 122, 0.08)', border: '1px dashed #71717a', borderRadius: '18px', overflow: 'visible' },
+    data: { label: 'Legado e Resíduos Operacionais', color: '#71717a' },
   },
 
-  { id: 'internet', position: { x: 290, y: -250 }, type: 'topology', data: { resource: { name: 'Internet', type: 'gateway', details: 'Entrada publica', status: 'active' } } },
-  { id: 'cloudflare', position: { x: 290, y: -90 }, type: 'topology', data: { resource: { name: 'Cloudflare', type: 'apigateway', details: 'DNS + WAF | *.invista.com.br', status: 'active' } } },
+  { id: 'internet', parentId: 'grp-edge', position: { x: 150, y: 52 }, type: 'topology', data: { resource: { name: 'Internet', type: 'gateway', details: 'Entrada pública dos consumidores e parceiros', status: 'active', managedBy: 'manual' } } },
+  { id: 'cloudflare', parentId: 'grp-edge', position: { x: 150, y: 176 }, type: 'topology', data: { resource: { name: 'Cloudflare', type: 'apigateway', details: 'DNS, proxy e camada WAF na borda', status: 'active', managedBy: 'manual' } } },
+  { id: 'fortigate', parentId: 'grp-edge', position: { x: 150, y: 300 }, type: 'topology', data: { resource: { name: 'FortiGate', type: 'gateway', details: 'Borda compartilhada | rede corporativa', status: 'active', managedBy: 'manual' } } },
+  { id: 'lb-crivo-dev', parentId: 'grp-edge', position: { x: 150, y: 424 }, type: 'topology', data: { resource: { name: 'Test_Crivo_Dev', type: 'loadbalancer', details: 'VIP privado que recebe host routing antes do API Gateway DEV', status: 'active', managedBy: 'manual' } } },
+  { id: 'apigw-dev', parentId: 'grp-edge', position: { x: 150, y: 548 }, type: 'topology', data: { resource: { name: 'api-gateway-dev', type: 'apigateway', details: 'Gateway unificado DEV fora do compartment nexus; distribui MFE e MS para o runtime atual', status: 'active', managedBy: 'terraform' } } },
 
-  { id: 'ado-platform', parentId: 'grp-ado', position: { x: 140, y: 40 }, type: 'topology', data: { resource: { name: 'Azure DevOps', type: 'box', details: 'Pipelines separadas por repositorio e por dominio', status: 'active' } } },
-  { id: 'repo-terraform', parentId: 'grp-ado-infra', position: { x: 20, y: 60 }, type: 'topology', data: { resource: { name: 'terraform-nexus', type: 'box', details: 'Infra repo', status: 'active' } } },
-  { id: 'repo-templates', parentId: 'grp-ado-infra', position: { x: 245, y: 60 }, type: 'topology', data: { resource: { name: 'azure-pipelines-templates', type: 'box', details: 'Templates de pipeline', status: 'active' } } },
-  { id: 'repo-infra-summary', parentId: 'grp-ado-infra', position: { x: 140, y: 78 }, type: 'topology', data: { resource: { name: 'Repos Infra', shortName: 'INFRA', summary: 'Terraform + templates', type: 'box', details: 'terraform-nexus e azure-pipelines-templates', status: 'active' } } },
-  { id: 'repo-shell', parentId: 'grp-ado-mfe', position: { x: 20, y: 60 }, type: 'topology', data: { resource: { name: 'mfe-shell', type: 'box', details: 'Repo shell', status: 'active' } } },
-  { id: 'repo-auth', parentId: 'grp-ado-mfe', position: { x: 245, y: 60 }, type: 'topology', data: { resource: { name: 'mfe-auth', type: 'box', details: 'Repo auth', status: 'active' } } },
-  { id: 'repo-user', parentId: 'grp-ado-mfe', position: { x: 20, y: 205 }, type: 'topology', data: { resource: { name: 'mfe-user', type: 'box', details: 'Repo user', status: 'active' } } },
-  { id: 'repo-person', parentId: 'grp-ado-mfe', position: { x: 245, y: 205 }, type: 'topology', data: { resource: { name: 'mfe-person', type: 'box', details: 'Repo person', status: 'active' } } },
-  { id: 'repo-formalization', parentId: 'grp-ado-mfe', position: { x: 20, y: 350 }, type: 'topology', data: { resource: { name: 'mfe-formalization', type: 'box', details: 'Repo formalization', status: 'active' } } },
-  { id: 'repo-poc', parentId: 'grp-ado-mfe', position: { x: 245, y: 350 }, type: 'topology', data: { resource: { name: 'mfe-poc', type: 'box', details: 'Repo poc', status: 'active' } } },
-  { id: 'repo-mfe-summary', parentId: 'grp-ado-mfe', position: { x: 140, y: 180 }, type: 'topology', data: { resource: { name: 'Repos MFE', shortName: 'MFE', summary: '6 frontends', type: 'box', details: 'shell, auth, user, person, formalization e poc', status: 'active' } } },
-  { id: 'repo-ms-auth-external', parentId: 'grp-ado-ms', position: { x: 20, y: 60 }, type: 'topology', data: { resource: { name: 'ms-auth-external', type: 'box', details: 'Repo auth external', status: 'active' } } },
-  { id: 'repo-ms-auth-sso', parentId: 'grp-ado-ms', position: { x: 245, y: 60 }, type: 'topology', data: { resource: { name: 'ms-auth-sso', type: 'box', details: 'Repo auth sso', status: 'active' } } },
-  { id: 'repo-ms-parameters', parentId: 'grp-ado-ms', position: { x: 20, y: 205 }, type: 'topology', data: { resource: { name: 'ms-parameters', type: 'box', details: 'Repo parameters', status: 'active' } } },
-  { id: 'repo-ms-person', parentId: 'grp-ado-ms', position: { x: 245, y: 205 }, type: 'topology', data: { resource: { name: 'ms-person', type: 'box', details: 'Repo person', status: 'active' } } },
-  { id: 'repo-ms-poc', parentId: 'grp-ado-ms', position: { x: 20, y: 350 }, type: 'topology', data: { resource: { name: 'ms-poc', type: 'box', details: 'Repo poc', status: 'active' } } },
-  { id: 'repo-ms-user', parentId: 'grp-ado-ms', position: { x: 245, y: 350 }, type: 'topology', data: { resource: { name: 'ms-user', type: 'box', details: 'Repo user', status: 'active' } } },
-  { id: 'repo-ms-summary', parentId: 'grp-ado-ms', position: { x: 140, y: 165 }, type: 'topology', data: { resource: { name: 'Repos MS', shortName: 'MS', summary: '6 servicos', type: 'box', details: 'auth-external, auth-sso, parameters, person, poc e user', status: 'active' } } },
-  { id: 'repo-ms-barramento', parentId: 'grp-ado-vis', position: { x: 20, y: 45 }, type: 'topology', data: { resource: { name: 'ms-barramento', type: 'box', details: 'Repo barramento', status: 'active' } } },
-  { id: 'repo-topology', parentId: 'grp-ado-vis', position: { x: 245, y: 45 }, type: 'topology', data: { resource: { name: 'oci-nexus-topology', type: 'box', details: 'Repo do diagrama', status: 'active' } } },
-  { id: 'repo-vis-summary', parentId: 'grp-ado-vis', position: { x: 140, y: 18 }, type: 'topology', data: { resource: { name: 'Visualizacao', shortName: 'VIS', summary: 'barramento + diagrama', type: 'box', details: 'ms-barramento e oci-nexus-topology', status: 'active' } } },
+  { id: 'vcn-dev', parentId: 'grp-network', position: { x: 40, y: 110 }, type: 'topology', data: { resource: { name: 'VCN-DEV', type: 'vcn', details: 'Rede compartilhada onde o API Gateway DEV está conectado', status: 'active', managedBy: 'manual' } } },
+  { id: 'drg', parentId: 'grp-network', position: { x: 180, y: 220 }, type: 'topology', data: { resource: { name: 'DRG-Invista-Shared', type: 'gateway', details: 'Hub de conectividade entre VCN-DEV e VCN OKE', status: 'active', managedBy: 'manual' } } },
+  { id: 'vcn-oke', parentId: 'grp-network', position: { x: 320, y: 110 }, type: 'topology', data: { resource: { name: 'VCN vcn-oke', type: 'vcn', details: 'Rede 10.110.0.0/16 que sustenta os clusters atuais de Nexus e Observabilidade', status: 'active', managedBy: 'terraform' } } },
 
-  { id: 'vcn-oke', parentId: 'grp-oke-dev', position: { x: 105, y: 48 }, type: 'topology', data: { resource: { name: 'VCN vcn-oke', type: 'vcn', details: '10.110.0.0/16 | Terraform', status: 'active' } } },
-  { id: 'fortigate', parentId: 'grp-shared', position: { x: 105, y: 60 }, type: 'topology', data: { resource: { name: 'FortiGate', type: 'gateway', details: '129.148.17.8 | borda compartilhada', status: 'active' } } },
-  { id: 'lb-crivo-dev', parentId: 'grp-shared', position: { x: 105, y: 220 }, type: 'topology', data: { resource: { name: 'Test_Crivo_Dev', type: 'loadbalancer', details: '10.8.4.127 | VIP / host routing MFE e MS', status: 'active' } } },
-  { id: 'drg', parentId: 'grp-shared', position: { x: 105, y: 380 }, type: 'topology', data: { resource: { name: 'DRG-Invista-Shared', type: 'gateway', details: 'Hub entre VCN-DEV e vcn-oke', status: 'manual' } } },
+  { id: 'azuredevops', parentId: 'grp-automation', position: { x: 170, y: 54 }, type: 'topology', data: { resource: { name: 'Azure DevOps', type: 'box', details: 'Pipelines de infraestrutura e deploy de aplicações; opera os componentes Terraform e os pós-deploys', status: 'active', managedBy: 'hybrid' } } },
+  { id: 'repo-tf', parentId: 'grp-automation', position: { x: 40, y: 220 }, type: 'topology', data: { resource: { name: 'tf_oci_clusters', type: 'box', details: 'Repositório Terraform principal do ambiente OCI Nexus', status: 'active', managedBy: 'terraform' } } },
+  { id: 'repo-templates', parentId: 'grp-automation', position: { x: 300, y: 220 }, type: 'topology', data: { resource: { name: 'pipeline-templates', type: 'box', details: 'Templates compartilhados de pipeline usados nos deploys', status: 'active', managedBy: 'terraform' } } },
+  { id: 'domain-nexus', parentId: 'grp-automation', position: { x: 40, y: 404 }, type: 'topology', data: { resource: { name: 'Identity Domain Nexus', type: 'shieldcheck', details: 'Domínio de identidade usado pela aplicação; não aparece como recurso operacional dentro do compartment', status: 'active', managedBy: 'manual' } } },
+  { id: 'vault-nexus', parentId: 'grp-automation', position: { x: 300, y: 404 }, type: 'topology', data: { resource: { name: 'Vault / KMS Nexus', type: 'shieldcheck', details: 'Cofre e chaves para segredos e integração com bancos; consumido pelo runtime e pela automação', status: 'active', managedBy: 'hybrid' } } },
+  { id: 'state-current', parentId: 'grp-automation', position: { x: 40, y: 588 }, type: 'topology', data: { resource: { name: 'nexus-terraform-tfstate', type: 'bucket', details: 'Bucket criado em 19/03/2026 para o estado atual do Terraform deste ambiente', status: 'active', managedBy: 'terraform' } } },
+  { id: 'state-legacy', parentId: 'grp-automation', position: { x: 300, y: 588 }, type: 'topology', data: { resource: { name: 'tfstate-terraform', type: 'bucket', details: 'Bucket de estado legado ainda existente no compartment; manter sob revisão antes de remover', status: 'warning', managedBy: 'terraform' } } },
 
-  { id: 'vcn-dev', parentId: 'grp-dev-inv', position: { x: 950, y: 70 }, type: 'topology', data: { resource: { name: 'VCN-DEV', type: 'vcn', details: '10.6.0.0/16 | rede compartilhada', status: 'manual' } } },
-  { id: 'apigw-dev', parentId: 'grp-dev-inv', position: { x: 950, y: 270 }, type: 'topology', data: { resource: { name: 'api-gateway-dev', type: 'apigateway', details: 'PRIVATE | cmp-dev-inv | gateway unificado DEV', status: 'active' } } },
-  { id: 'mfe-routes', parentId: 'grp-dev-inv', position: { x: 950, y: 500 }, type: 'topology', data: { resource: { name: 'MFE routes', type: 'box', details: 'deploy-mfe-unified-dev | /mfe-shell /mfe-auth /mfe-user /mfe-person /mfe-poc /mfe-formalization', status: 'active' } } },
-  { id: 'ms-routes', parentId: 'grp-dev-inv', position: { x: 950, y: 690 }, type: 'topology', data: { resource: { name: 'MS routes', type: 'box', details: '/ms-auth-external /ms-auth-sso /ms-user /ms-person /ms-poc /ms-parameters /ms-belt /ms-notify /ms-barramento', status: 'active' } } },
+  { id: 'cls-nexus', parentId: 'grp-platform', position: { x: 70, y: 96 }, type: 'topology', data: { resource: { name: 'cls-dev-nexus', type: 'cluster', details: 'Cluster OKE ativo do domínio Nexus; recriado em 19/03/2026', status: 'active', managedBy: 'terraform' } } },
+  { id: 'np-nexus', parentId: 'grp-platform', position: { x: 70, y: 248 }, type: 'topology', data: { resource: { name: 'np-dev-1', type: 'subnet', details: 'Node pool ativo do cluster Nexus | 3 nós | VM.Standard.E4.Flex | 2 OCPU / 16 GB', status: 'active', managedBy: 'terraform' } } },
+  { id: 'cls-obs', parentId: 'grp-platform', position: { x: 330, y: 96 }, type: 'topology', data: { resource: { name: 'cls-dev-observabilidade', type: 'cluster', details: 'Cluster OKE ativo de observabilidade; recriado em 19/03/2026', status: 'active', managedBy: 'terraform' } } },
+  { id: 'np-obs', parentId: 'grp-platform', position: { x: 330, y: 248 }, type: 'topology', data: { resource: { name: 'np-dev-3', type: 'subnet', details: 'Node pool ativo do cluster de observabilidade | 3 nós | VM.Standard.E4.Flex | 2 OCPU / 16 GB', status: 'active', managedBy: 'terraform' } } },
+  { id: 'runtime-summary', parentId: 'grp-platform', position: { x: 560, y: 170 }, type: 'topology', data: { resource: { name: 'Runtime Atual Nexus', shortName: 'RUNTIME', summary: '2 clusters OKE ativos', type: 'cluster', details: 'Hoje o cmp-dev-nexus opera com 2 clusters: cls-dev-nexus e cls-dev-observabilidade. O barramento não aparece mais como cluster ativo neste compartment.', status: 'active', managedBy: 'terraform' } } },
 
-  { id: 'cls-nexus', parentId: 'grp-nexus', position: { x: 60, y: 90 }, type: 'topology', data: { resource: { name: 'cls-dev-nexus', type: 'cluster', details: 'v1.34.1 | 3 nodes | nexus-services', status: 'active' } } },
-  { id: 'cls-obs', parentId: 'grp-nexus', position: { x: 320, y: 90 }, type: 'topology', data: { resource: { name: 'cls-dev-observabilidade', type: 'cluster', details: 'v1.34.1 | 3 nodes | observabilidade', status: 'active' } } },
-  { id: 'lb-public-nexus', parentId: 'grp-nexus', position: { x: 580, y: 90 }, type: 'topology', data: { resource: { name: 'LB Publico nexus', type: 'loadbalancer', details: '137.131.236.202 | ingress publico do cluster', status: 'active' } } },
-  { id: 'lb-nexus-int', parentId: 'grp-nexus', position: { x: 60, y: 330 }, type: 'topology', data: { resource: { name: 'LB nexus internal', type: 'loadbalancer', details: '10.110.143.54 | trafego ms core', status: 'active' } } },
-  { id: 'lb-observ-node', parentId: 'grp-nexus', position: { x: 320, y: 330 }, type: 'topology', data: { resource: { name: 'LB observabilidade', type: 'loadbalancer', details: '10.110.136.228 | trafego interno observabilidade', status: 'active' } } },
-  { id: 'db-atp', parentId: 'grp-nexus', position: { x: 60, y: 570 }, type: 'topology', data: { resource: { name: 'NEXUS_DEV (AJD)', type: 'database', details: 'Autonomous JSON DB', status: 'active' } } },
-  { id: 'db-pg-nexus', parentId: 'grp-nexus', position: { x: 320, y: 570 }, type: 'topology', data: { resource: { name: 'NEXUS_DEV (PostgreSQL)', type: 'database', details: 'Banco relacional dos MS nexus', status: 'active' } } },
-  { id: 'db-redis', parentId: 'grp-nexus', position: { x: 580, y: 570 }, type: 'topology', data: { resource: { name: 'NEXUS_DEV (Redis)', type: 'database', details: 'Cache e sessoes', status: 'active' } } },
-  { id: 'nexus-platform-summary', parentId: 'grp-nexus', position: { x: 170, y: 220 }, type: 'topology', data: { resource: { name: 'Plataforma Nexus', shortName: 'RUNTIME', summary: 'cluster + ingress + obs', type: 'cluster', details: 'cls-dev-nexus, cls-dev-observabilidade e LBs internos/publicos', status: 'active' } } },
-  { id: 'nexus-data-summary', parentId: 'grp-nexus', position: { x: 430, y: 470 }, type: 'topology', data: { resource: { name: 'Dados Nexus', shortName: 'DADOS', summary: 'AJD + PostgreSQL + Redis', type: 'database', details: 'Autonomous JSON DB, PostgreSQL e Redis do ecossistema nexus', status: 'active' } } },
+  { id: 'db-pg-nexus', parentId: 'grp-data', position: { x: 70, y: 98 }, type: 'topology', data: { resource: { name: 'NEXUS_DEV (PostgreSQL)', type: 'database', details: 'DB System PostgreSQL criado via console OCI; base operacional dos microsserviços Nexus', status: 'active', managedBy: 'manual' } } },
+  { id: 'db-pg-barramento', parentId: 'grp-data', position: { x: 330, y: 98 }, type: 'topology', data: { resource: { name: 'BARRAMENTO_DEV (PostgreSQL)', type: 'database', details: 'DB System PostgreSQL do barramento; existe no compartment, mas o cluster OKE correspondente não está ativo aqui hoje', status: 'warning', managedBy: 'manual' } } },
+  { id: 'db-redis', parentId: 'grp-data', position: { x: 590, y: 98 }, type: 'topology', data: { resource: { name: 'NEXUS_DEV (Redis)', type: 'database', details: 'Redis Cluster ativo criado manualmente no OCI; usado para cache e sessão', status: 'active', managedBy: 'manual' } } },
+  { id: 'db-ajd', parentId: 'grp-data', position: { x: 200, y: 250 }, type: 'topology', data: { resource: { name: 'NEXUS_DEV (AJD)', type: 'database', details: 'Autonomous JSON Database (AJD) ativo no compartment desde 21/01/2026', status: 'active', managedBy: 'manual' } } },
+  { id: 'data-summary', parentId: 'grp-data', position: { x: 470, y: 250 }, type: 'topology', data: { resource: { name: 'Dados Operacionais', shortName: 'DADOS', summary: '4 serviços de dados', type: 'database', details: 'O ambiente atual mistura clusters Terraform com bancos e cache provisionados manualmente no OCI.', status: 'active', managedBy: 'hybrid' } } },
 
-  { id: 'cls-barramento', parentId: 'grp-barramento', position: { x: 40, y: 75 }, type: 'topology', data: { resource: { name: 'cls-dev-barramento', type: 'cluster', details: 'v1.34.1 | 3 nodes | integration-hub', status: 'active' } } },
-  { id: 'lb-barramento-node', parentId: 'grp-barramento', position: { x: 270, y: 75 }, type: 'topology', data: { resource: { name: 'LB barramento', type: 'loadbalancer', details: '10.110.139.53 | nginx-internal', status: 'active' } } },
-  { id: 'db-pg-barramento', parentId: 'grp-barramento', position: { x: 500, y: 75 }, type: 'topology', data: { resource: { name: 'BARRAMENTO_DEV (PostgreSQL)', type: 'database', details: 'Banco relacional do barramento', status: 'active' } } },
-  { id: 'barramento-summary', parentId: 'grp-barramento', position: { x: 255, y: 75 }, type: 'topology', data: { resource: { name: 'Barramento', shortName: 'BARRAMENTO', summary: 'cluster + lb + postgres', type: 'cluster', details: 'cls-dev-barramento, nginx-internal e PostgreSQL do barramento', status: 'active' } } },
+  { id: 'mfe-summary', parentId: 'grp-storage', position: { x: 70, y: 104 }, type: 'topology', data: { resource: { name: 'Buckets MFE DEV', shortName: 'MFE BUCKETS', summary: '6 buckets de frontends', type: 'bucket', details: 'Buckets criados em 19/03/2026: mfe-auth-dev, mfe-formalization-dev, mfe-person-dev, mfe-poc-dev, mfe-shell-dev e mfe-user-dev.', status: 'active', managedBy: 'terraform' } } },
+  { id: 'bucket-shell', parentId: 'grp-storage', position: { x: 340, y: 44 }, type: 'topology', data: { resource: { name: 'mfe-shell-dev', type: 'bucket', details: 'Assets do shell frontend', status: 'active', managedBy: 'terraform' } } },
+  { id: 'bucket-auth', parentId: 'grp-storage', position: { x: 580, y: 44 }, type: 'topology', data: { resource: { name: 'mfe-auth-dev', type: 'bucket', details: 'Assets do auth frontend', status: 'active', managedBy: 'terraform' } } },
+  { id: 'bucket-user', parentId: 'grp-storage', position: { x: 820, y: 44 }, type: 'topology', data: { resource: { name: 'mfe-user-dev', type: 'bucket', details: 'Assets do user frontend', status: 'active', managedBy: 'terraform' } } },
+  { id: 'bucket-person', parentId: 'grp-storage', position: { x: 340, y: 204 }, type: 'topology', data: { resource: { name: 'mfe-person-dev', type: 'bucket', details: 'Assets do person frontend', status: 'active', managedBy: 'terraform' } } },
+  { id: 'bucket-poc', parentId: 'grp-storage', position: { x: 580, y: 204 }, type: 'topology', data: { resource: { name: 'mfe-poc-dev', type: 'bucket', details: 'Assets do poc frontend', status: 'active', managedBy: 'terraform' } } },
+  { id: 'bucket-formalization', parentId: 'grp-storage', position: { x: 820, y: 204 }, type: 'topology', data: { resource: { name: 'mfe-formalization-dev', type: 'bucket', details: 'Assets do formalization frontend', status: 'active', managedBy: 'terraform' } } },
+  { id: 'storage-state-summary', parentId: 'grp-storage', position: { x: 1120, y: 104 }, type: 'topology', data: { resource: { name: 'Terraform State', shortName: 'STATE', summary: 'bucket atual + bucket legado', type: 'bucket', details: 'O compartment mantém o novo bucket nexus-terraform-tfstate e também o tfstate-terraform herdado.', status: 'warning', managedBy: 'terraform' } } },
 
-  { id: 'bucket-shell', parentId: 'grp-buckets', position: { x: 60, y: 95 }, type: 'topology', data: { resource: { name: 'mfe-shell-dev', type: 'bucket', details: '/mfe-shell/', status: 'active' } } },
-  { id: 'bucket-auth', parentId: 'grp-buckets', position: { x: 430, y: 95 }, type: 'topology', data: { resource: { name: 'mfe-auth-dev', type: 'bucket', details: '/mfe-auth/', status: 'active' } } },
-  { id: 'bucket-user', parentId: 'grp-buckets', position: { x: 800, y: 95 }, type: 'topology', data: { resource: { name: 'mfe-user-dev', type: 'bucket', details: '/mfe-user/', status: 'active' } } },
-  { id: 'bucket-person', parentId: 'grp-buckets', position: { x: 60, y: 255 }, type: 'topology', data: { resource: { name: 'mfe-person-dev', type: 'bucket', details: '/mfe-person/', status: 'active' } } },
-  { id: 'bucket-poc', parentId: 'grp-buckets', position: { x: 430, y: 255 }, type: 'topology', data: { resource: { name: 'mfe-poc-dev', type: 'bucket', details: '/mfe-poc/', status: 'active' } } },
-  { id: 'bucket-formalization', parentId: 'grp-buckets', position: { x: 800, y: 255 }, type: 'topology', data: { resource: { name: 'mfe-formalization-dev', type: 'bucket', details: '/mfe-formalization/', status: 'active' } } },
-  { id: 'storage-summary', parentId: 'grp-buckets', position: { x: 470, y: 165 }, type: 'topology', data: { resource: { name: 'Buckets MFE', shortName: 'BUCKETS', summary: '6 assets buckets', type: 'bucket', details: 'shell, auth, user, person, poc e formalization', status: 'active' } } },
-
-  { id: 'idomain-nexus', parentId: 'grp-iam-nexus', position: { x: 60, y: 70 }, type: 'topology', data: { resource: { name: 'Identity Domain Nexus', type: 'shieldcheck', details: 'App auth do ecossistema nexus', status: 'active' } } },
-  { id: 'vault-nexus-node', parentId: 'grp-iam-nexus', position: { x: 430, y: 70 }, type: 'topology', data: { resource: { name: 'Vault nexus-api-dev', type: 'shieldcheck', details: 'KMS + secrets | key-nexus-dev', status: 'active' } } },
-  { id: 'sa-tf-admin', parentId: 'grp-iam-nexus', position: { x: 800, y: 70 }, type: 'topology', data: { resource: { name: 'svc-terraform', type: 'box', details: 'Service connection das pipelines', status: 'active' } } },
-  { id: 'iam-summary', parentId: 'grp-iam-nexus', position: { x: 470, y: 70 }, type: 'topology', data: { resource: { name: 'IAM Nexus', shortName: 'IAM / VAULT', summary: 'auth + secrets + svc tf', type: 'shieldcheck', details: 'Identity Domain, Vault e service connection do Terraform', status: 'active' } } },
-
-  { id: 'apigw-nexus', parentId: 'grp-legacy', position: { x: 105, y: 70 }, type: 'topology', data: { resource: { name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'DELETED em 2026-03-14 | removido do fluxo principal', status: 'inactive' } } },
+  { id: 'legacy-lbs', parentId: 'grp-legacy', position: { x: 90, y: 78 }, type: 'topology', data: { resource: { name: 'Legacy Load Balancers', type: 'loadbalancer', details: 'Existem 4 load balancers ativos associados a clusters antigos/deletados. Devem ser tratados como resíduo operacional até validação e limpeza.', status: 'warning', managedBy: 'manual' } } },
+  { id: 'legacy-gw', parentId: 'grp-legacy', position: { x: 380, y: 78 }, type: 'topology', data: { resource: { name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'Gateway legado já removido do fluxo principal; permanece apenas como referência histórica.', status: 'inactive', managedBy: 'manual' } } },
+  { id: 'legacy-note', parentId: 'grp-legacy', position: { x: 670, y: 78 }, type: 'topology', data: { resource: { name: 'Leitura Operacional', shortName: 'LEGADO', summary: 'não confundir com runtime atual', type: 'box', details: 'O desenho principal considera apenas os 2 clusters OKE atuais. Componentes órfãos ou deletados foram isolados aqui para evitar leitura incorreta.', status: 'warning', managedBy: 'hybrid' } } },
 ];
 
 const initialEdges: Edge[] = [
-  { id: 'e-int-cf', source: 'internet', target: 'cloudflare', animated: true, type: 'bezier', style: { stroke: '#e4e4e7' } },
-  { id: 'e-cf-fortigate', source: 'cloudflare', target: 'fortigate', label: 'proxy + hostnames', animated: true, type: 'bezier' },
-  { id: 'e-fortigate-lb', source: 'fortigate', target: 'lb-crivo-dev', type: 'bezier', animated: true },
-  { id: 'e-lb-apigwdev', source: 'lb-crivo-dev', target: 'apigw-dev', label: 'VIP 10.6.0.181:443', type: 'bezier', animated: true },
-  { id: 'e-drg-vcnoke', source: 'drg', target: 'vcn-oke', label: 'ATT-VCN-OKE-DEV', type: 'bezier' },
-  { id: 'e-drg-vcndev', source: 'drg', target: 'vcn-dev', label: 'ATT-VCN-DEV', type: 'bezier' },
-  { id: 'e-vcndev-apigwdev', source: 'vcn-dev', target: 'apigw-dev', label: 'SBNT-DEV', type: 'bezier' },
-  { id: 'e-apigwdev-mferoutes', source: 'apigw-dev', target: 'mfe-routes', label: 'rotas MFE', type: 'bezier', animated: true, style: { stroke: '#14b8a6' } },
-  { id: 'e-apigwdev-msroutes', source: 'apigw-dev', target: 'ms-routes', label: 'rotas MS', type: 'bezier', animated: true, style: { stroke: '#f97316' } },
-  { id: 'e-mferoutes-shell', source: 'mfe-routes', target: 'bucket-shell', label: 'shell', type: 'bezier', style: { stroke: '#14b8a6' } },
-  { id: 'e-mferoutes-auth', source: 'mfe-routes', target: 'bucket-auth', label: 'auth', type: 'bezier', style: { stroke: '#14b8a6' } },
-  { id: 'e-mferoutes-user', source: 'mfe-routes', target: 'bucket-user', label: 'user', type: 'bezier', style: { stroke: '#14b8a6' } },
-  { id: 'e-mferoutes-person', source: 'mfe-routes', target: 'bucket-person', label: 'person', type: 'bezier', style: { stroke: '#14b8a6' } },
-  { id: 'e-mferoutes-poc', source: 'mfe-routes', target: 'bucket-poc', label: 'poc', type: 'bezier', style: { stroke: '#14b8a6' } },
-  { id: 'e-mferoutes-form', source: 'mfe-routes', target: 'bucket-formalization', label: 'formalization', type: 'bezier', style: { stroke: '#14b8a6' } },
-  { id: 'e-mferoutes-storage', source: 'mfe-routes', target: 'storage-summary', label: 'assets MFE', type: 'bezier', style: { stroke: '#14b8a6' } },
-  { id: 'e-msroutes-nexus', source: 'ms-routes', target: 'lb-nexus-int', label: 'ms core', type: 'bezier', animated: true, style: { stroke: '#f97316' } },
-  { id: 'e-msroutes-barr', source: 'ms-routes', target: 'lb-barramento-node', label: 'ms-barramento', type: 'bezier', animated: true, style: { stroke: '#22c55e' } },
-  { id: 'e-msroutes-nexus-summary', source: 'ms-routes', target: 'nexus-platform-summary', label: 'servicos nexus', type: 'bezier', animated: true, style: { stroke: '#f97316' } },
-  { id: 'e-msroutes-barr-summary', source: 'ms-routes', target: 'barramento-summary', label: 'barramento', type: 'bezier', animated: true, style: { stroke: '#22c55e' } },
-  { id: 'e-lbpub-clsnexus', source: 'lb-public-nexus', target: 'cls-nexus', label: 'NodePort ingress', type: 'bezier', animated: true, style: { stroke: '#f59e0b' } },
-  { id: 'e-vcnoke-clsnexus', source: 'vcn-oke', target: 'cls-nexus', type: 'bezier' },
-  { id: 'e-vcnoke-clsobs', source: 'vcn-oke', target: 'cls-obs', type: 'bezier' },
-  { id: 'e-vcnoke-clsbarr', source: 'vcn-oke', target: 'cls-barramento', type: 'bezier' },
-  { id: 'e-vcnoke-nexus-summary', source: 'vcn-oke', target: 'nexus-platform-summary', type: 'bezier' },
-  { id: 'e-vcnoke-barr-summary', source: 'vcn-oke', target: 'barramento-summary', type: 'bezier' },
-  { id: 'e-lbnexus-clsnexus', source: 'lb-nexus-int', target: 'cls-nexus', label: 'nexus-services', type: 'bezier', style: { stroke: '#f97316' } },
-  { id: 'e-lbobs-clsobs', source: 'lb-observ-node', target: 'cls-obs', label: 'observabilidade', type: 'bezier', style: { stroke: '#6366f1' } },
-  { id: 'e-lbbarr-clsbarr', source: 'lb-barramento-node', target: 'cls-barramento', label: 'integration-hub', type: 'bezier', style: { stroke: '#22c55e' } },
-  { id: 'e-clsnexus-dbatp', source: 'cls-nexus', target: 'db-atp', label: 'AJD', type: 'bezier', style: { stroke: '#84cc16' } },
-  { id: 'e-clsnexus-dbpg', source: 'cls-nexus', target: 'db-pg-nexus', label: 'PostgreSQL', type: 'bezier', style: { stroke: '#84cc16' } },
-  { id: 'e-clsnexus-dbredis', source: 'cls-nexus', target: 'db-redis', label: 'Redis', type: 'bezier', style: { stroke: '#84cc16' } },
-  { id: 'e-platform-data-summary', source: 'nexus-platform-summary', target: 'nexus-data-summary', label: 'persistencia', type: 'bezier', style: { stroke: '#84cc16' } },
-  { id: 'e-clsbarr-dbpg', source: 'cls-barramento', target: 'db-pg-barramento', label: 'PostgreSQL', type: 'bezier', style: { stroke: '#84cc16' } },
-  { id: 'e-ado-infra', source: 'ado-platform', target: 'apigw-dev', label: 'infra + post-apply', type: 'bezier', animated: true, style: { stroke: '#0ea5e9', strokeDasharray: '7 4' } },
-  { id: 'e-ado-buckets', source: 'ado-platform', target: 'mfe-routes', label: 'publish MFEs', type: 'bezier', animated: true, style: { stroke: '#0ea5e9', strokeDasharray: '7 4' } },
-  { id: 'e-ado-nexus', source: 'ado-platform', target: 'cls-nexus', label: 'deploy ms nexus', type: 'bezier', animated: true, style: { stroke: '#0ea5e9', strokeDasharray: '7 4' } },
-  { id: 'e-ado-barramento', source: 'ado-platform', target: 'cls-barramento', label: 'deploy barramento', type: 'bezier', animated: true, style: { stroke: '#0ea5e9', strokeDasharray: '7 4' } },
-  { id: 'e-ado-obs', source: 'ado-platform', target: 'cls-obs', label: 'deploy observabilidade', type: 'bezier', animated: true, style: { stroke: '#0ea5e9', strokeDasharray: '7 4' } },
-  { id: 'e-ado-nexus-summary', source: 'ado-platform', target: 'nexus-platform-summary', label: 'deploy runtime', type: 'bezier', animated: true, style: { stroke: '#0ea5e9', strokeDasharray: '7 4' } },
-  { id: 'e-ado-barramento-summary', source: 'ado-platform', target: 'barramento-summary', label: 'deploy barramento', type: 'bezier', animated: true, style: { stroke: '#0ea5e9', strokeDasharray: '7 4' } },
-  { id: 'e-ado-iam-summary', source: 'ado-platform', target: 'iam-summary', label: 'segredos + conexao', type: 'bezier', style: { stroke: '#38bdf8' } },
-  { id: 'e-ado-sa', source: 'ado-platform', target: 'sa-tf-admin', label: 'service connection', type: 'bezier', style: { stroke: '#38bdf8' } },
-  { id: 'e-sa-vault', source: 'sa-tf-admin', target: 'vault-nexus-node', label: 'vault secrets', type: 'bezier', style: { stroke: '#38bdf8', strokeDasharray: '4 3' } },
-  { id: 'e-domain-clsnexus', source: 'idomain-nexus', target: 'cls-nexus', label: 'app auth', type: 'bezier', style: { stroke: '#f97316', strokeDasharray: '4 3' } },
+  { id: 'e-internet-cf', source: 'internet', target: 'cloudflare', label: 'DNS / proxy', animated: true, type: 'smoothstep', style: { stroke: '#0ea5e9' } },
+  { id: 'e-cf-forti', source: 'cloudflare', target: 'fortigate', label: 'borda', animated: true, type: 'smoothstep', style: { stroke: '#0ea5e9' } },
+  { id: 'e-forti-lb', source: 'fortigate', target: 'lb-crivo-dev', label: 'entrada privada', animated: true, type: 'smoothstep', style: { stroke: '#0ea5e9' } },
+  { id: 'e-lb-apigw', source: 'lb-crivo-dev', target: 'apigw-dev', label: 'host routing', animated: true, type: 'smoothstep', style: { stroke: '#0ea5e9' } },
+
+  { id: 'e-vcndev-drg', source: 'vcn-dev', target: 'drg', label: 'trânsito', type: 'smoothstep', style: { stroke: '#eab308' } },
+  { id: 'e-drg-vcnoke', source: 'drg', target: 'vcn-oke', label: 'ATT-VCN-OKE-DEV', type: 'smoothstep', style: { stroke: '#eab308' } },
+
+  { id: 'e-apigw-runtime', source: 'apigw-dev', target: 'runtime-summary', label: 'rotas MS', animated: true, type: 'bezier', style: { stroke: '#f97316' } },
+  { id: 'e-apigw-buckets', source: 'apigw-dev', target: 'mfe-summary', label: 'rotas MFE', animated: true, type: 'bezier', style: { stroke: '#14b8a6' } },
+
+  { id: 'e-vcnoke-nexus', source: 'vcn-oke', target: 'cls-nexus', label: 'rede OKE', type: 'bezier', style: { stroke: '#a855f7' } },
+  { id: 'e-vcnoke-obs', source: 'vcn-oke', target: 'cls-obs', label: 'rede OKE', type: 'bezier', style: { stroke: '#a855f7' } },
+  { id: 'e-cls-np-nexus', source: 'cls-nexus', target: 'np-nexus', label: 'node pool', type: 'smoothstep', style: { stroke: '#a855f7', strokeDasharray: '4 3' } },
+  { id: 'e-cls-np-obs', source: 'cls-obs', target: 'np-obs', label: 'node pool', type: 'smoothstep', style: { stroke: '#a855f7', strokeDasharray: '4 3' } },
+  { id: 'e-runtime-clusters-1', source: 'runtime-summary', target: 'cls-nexus', type: 'smoothstep', style: { stroke: '#a855f7' } },
+  { id: 'e-runtime-clusters-2', source: 'runtime-summary', target: 'cls-obs', type: 'smoothstep', style: { stroke: '#a855f7' } },
+
+  { id: 'e-nexus-pg', source: 'cls-nexus', target: 'db-pg-nexus', label: '5432', animated: true, type: 'bezier', style: { stroke: '#22c55e' } },
+  { id: 'e-nexus-redis', source: 'cls-nexus', target: 'db-redis', label: '6379', animated: true, type: 'bezier', style: { stroke: '#22c55e' } },
+  { id: 'e-nexus-ajd', source: 'cls-nexus', target: 'db-ajd', label: 'JSON', animated: true, type: 'bezier', style: { stroke: '#22c55e' } },
+  { id: 'e-obs-pg', source: 'cls-obs', target: 'db-pg-nexus', label: 'telemetria', type: 'bezier', style: { stroke: '#22c55e', strokeDasharray: '4 3' } },
+  { id: 'e-data-summary-pg1', source: 'data-summary', target: 'db-pg-nexus', type: 'smoothstep', style: { stroke: '#22c55e' } },
+  { id: 'e-data-summary-pg2', source: 'data-summary', target: 'db-pg-barramento', type: 'smoothstep', style: { stroke: '#f59e0b' } },
+  { id: 'e-data-summary-redis', source: 'data-summary', target: 'db-redis', type: 'smoothstep', style: { stroke: '#22c55e' } },
+  { id: 'e-data-summary-ajd', source: 'data-summary', target: 'db-ajd', type: 'smoothstep', style: { stroke: '#22c55e' } },
+
+  { id: 'e-mfe-shell', source: 'mfe-summary', target: 'bucket-shell', type: 'smoothstep', style: { stroke: '#14b8a6' } },
+  { id: 'e-mfe-auth', source: 'mfe-summary', target: 'bucket-auth', type: 'smoothstep', style: { stroke: '#14b8a6' } },
+  { id: 'e-mfe-user', source: 'mfe-summary', target: 'bucket-user', type: 'smoothstep', style: { stroke: '#14b8a6' } },
+  { id: 'e-mfe-person', source: 'mfe-summary', target: 'bucket-person', type: 'smoothstep', style: { stroke: '#14b8a6' } },
+  { id: 'e-mfe-poc', source: 'mfe-summary', target: 'bucket-poc', type: 'smoothstep', style: { stroke: '#14b8a6' } },
+  { id: 'e-mfe-form', source: 'mfe-summary', target: 'bucket-formalization', type: 'smoothstep', style: { stroke: '#14b8a6' } },
+  { id: 'e-state-current', source: 'storage-state-summary', target: 'state-current', type: 'smoothstep', style: { stroke: '#14b8a6' } },
+  { id: 'e-state-legacy', source: 'storage-state-summary', target: 'state-legacy', type: 'smoothstep', style: { stroke: '#f59e0b' } },
+
+  { id: 'e-ado-repo', source: 'azuredevops', target: 'repo-tf', label: 'infra', type: 'smoothstep', style: { stroke: '#6366f1' } },
+  { id: 'e-ado-templates', source: 'azuredevops', target: 'repo-templates', label: 'templates', type: 'smoothstep', style: { stroke: '#6366f1' } },
+  { id: 'e-ado-gw', source: 'azuredevops', target: 'apigw-dev', label: 'apply / publish', animated: true, type: 'bezier', style: { stroke: '#6366f1', strokeDasharray: '6 4' } },
+  { id: 'e-ado-runtime', source: 'azuredevops', target: 'runtime-summary', label: 'deploys', animated: true, type: 'bezier', style: { stroke: '#6366f1', strokeDasharray: '6 4' } },
+  { id: 'e-ado-storage', source: 'azuredevops', target: 'mfe-summary', label: 'frontend assets', animated: true, type: 'bezier', style: { stroke: '#6366f1', strokeDasharray: '6 4' } },
+  { id: 'e-ado-state', source: 'repo-tf', target: 'state-current', label: 'remote state', type: 'bezier', style: { stroke: '#10b981', strokeDasharray: '6 4' } },
+  { id: 'e-vault-data', source: 'vault-nexus', target: 'data-summary', label: 'segredos', type: 'bezier', style: { stroke: '#facc15', strokeDasharray: '4 3' } },
+  { id: 'e-domain-runtime', source: 'domain-nexus', target: 'cls-nexus', label: 'auth app', type: 'bezier', style: { stroke: '#f97316', strokeDasharray: '4 3' } },
 ];
 
+const executiveOnlyNodeIds = new Set(['runtime-summary', 'data-summary', 'mfe-summary', 'storage-state-summary', 'legacy-note']);
 const technicalOnlyNodeIds = new Set([
-  'cls-nexus',
-  'cls-obs',
-  'lb-public-nexus',
-  'lb-nexus-int',
-  'lb-observ-node',
-  'db-atp',
-  'db-pg-nexus',
-  'db-redis',
-  'cls-barramento',
-  'lb-barramento-node',
-  'db-pg-barramento',
+  'np-nexus',
+  'np-obs',
   'bucket-shell',
   'bucket-auth',
   'bucket-user',
   'bucket-person',
   'bucket-poc',
   'bucket-formalization',
-  'idomain-nexus',
-  'vault-nexus-node',
-  'sa-tf-admin',
+  'state-current',
+  'state-legacy',
 ]);
-
-const executiveOnlyNodeIds = new Set([
-  'repo-infra-summary',
-  'repo-mfe-summary',
-  'repo-ms-summary',
-  'repo-vis-summary',
-  'nexus-platform-summary',
-  'nexus-data-summary',
-  'barramento-summary',
-  'storage-summary',
-  'iam-summary',
-]);
-
-function isRepoNode(id: string) {
-  return id.startsWith('repo-') && !executiveOnlyNodeIds.has(id);
-}
 
 export function NexusDiagram() {
   const [viewMode, setViewMode] = useState<ViewMode>('executive');
 
   const nodes = useMemo(() => {
     return initialNodes.filter((node) => {
-      if (viewMode === 'technical') {
-        return !executiveOnlyNodeIds.has(node.id);
+      if (viewMode === 'executive') {
+        return !technicalOnlyNodeIds.has(node.id);
       }
 
-      if (isRepoNode(node.id)) {
-        return false;
-      }
-
-      if (technicalOnlyNodeIds.has(node.id)) {
-        return false;
-      }
-
-      return true;
+      return !executiveOnlyNodeIds.has(node.id);
     });
   }, [viewMode]);
 
   const edges = useMemo(() => {
-    const visibleNodeIds = new Set(nodes.map((node) => node.id));
-    return initialEdges.filter((edge) => visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target));
+    const visible = new Set(nodes.map((node) => node.id));
+    return initialEdges.filter((edge) => visible.has(edge.source) && visible.has(edge.target));
   }, [nodes]);
 
   return (
@@ -307,26 +212,23 @@ export function NexusDiagram() {
         edges={edges}
         nodeTypes={nodeTypes}
         fitView
-        fitViewOptions={{ padding: 0.16 }}
+        fitViewOptions={{ padding: 0.14, minZoom: 0.3, maxZoom: 1.2 }}
         defaultEdgeOptions={{
           type: 'bezier',
-          style: { stroke: '#71717a', strokeWidth: 1.6 },
-          labelStyle: { fill: '#e4e4e7', fontSize: 10, fontWeight: 700 },
+          style: { stroke: '#71717a', strokeWidth: 1.7 },
+          labelStyle: { fill: '#f4f4f5', fontSize: 10, fontWeight: 700 },
           labelBgStyle: { fill: 'rgba(9, 9, 11, 0.92)', fillOpacity: 1 },
           labelBgPadding: [8, 4],
-          labelBgBorderRadius: 6,
+          labelBgBorderRadius: 8,
         }}
       >
-        <Panel position="top-left" className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 text-white m-4 shadow-2xl max-w-[620px]">
+        <Panel position="top-left" className="bg-zinc-950/82 backdrop-blur-xl p-6 rounded-3xl border border-white/10 text-white m-4 shadow-2xl max-w-[700px]">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-black italic tracking-tighter flex items-center gap-2">
-                <div className="w-3 h-3 bg-red-600 rounded-full animate-pulse" />
-                NEXUS TOPOLOGY
-              </h1>
-              <p className="text-xs font-bold text-zinc-400 mt-1 uppercase tracking-widest">DEV atualizado em 2026-03-14 | layout v3</p>
+              <h1 className="text-2xl font-black tracking-tight">OCI Nexus DEV</h1>
+              <p className="text-xs font-bold text-zinc-400 mt-1 uppercase tracking-[0.24em]">Topologia unificada | atualizada em 19/03/2026</p>
             </div>
-            <div className="flex rounded-xl border border-white/10 bg-zinc-950/70 p-1">
+            <div className="flex rounded-xl border border-white/10 bg-zinc-900/80 p-1">
               <button
                 onClick={() => setViewMode('executive')}
                 className={`rounded-lg px-3 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition ${viewMode === 'executive' ? 'bg-white text-zinc-950' : 'text-zinc-400 hover:text-white'}`}
@@ -337,46 +239,40 @@ export function NexusDiagram() {
                 onClick={() => setViewMode('technical')}
                 className={`rounded-lg px-3 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition ${viewMode === 'technical' ? 'bg-white text-zinc-950' : 'text-zinc-400 hover:text-white'}`}
               >
-                Tecnica
+                Técnica
               </button>
             </div>
           </div>
 
-          <p className="mt-4 text-xs leading-relaxed text-zinc-300">
-            Nos padronizados com rótulos curtos. Os detalhes completos ficaram no tooltip ao passar o mouse.
+          <p className="mt-4 text-sm leading-relaxed text-zinc-300">
+            O desenho agora junta a visão operacional da OCI com a visão de automação. Cada nó mostra explicitamente se o recurso é <span className="text-emerald-300 font-bold">Terraform</span>, <span className="text-orange-300 font-bold">Manual</span> ou <span className="text-sky-300 font-bold">Misto</span>.
           </p>
 
-          <div className="mt-4 flex gap-2 flex-wrap">
-            <div className="px-2 py-1 bg-sky-500/20 text-sky-400 rounded text-[10px] font-bold border border-sky-500/30">Repos por dominio</div>
-            <div className="px-2 py-1 bg-teal-500/20 text-teal-400 rounded text-[10px] font-bold border border-teal-500/30">Rotas MFE agrupadas</div>
-            <div className="px-2 py-1 bg-orange-500/20 text-orange-400 rounded text-[10px] font-bold border border-orange-500/30">Rotas MS agrupadas</div>
-            <div className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-[10px] font-bold border border-purple-500/30">Gateway unificado</div>
-            <div className="px-2 py-1 bg-zinc-500/20 text-zinc-400 rounded text-[10px] font-bold border border-zinc-500/30">Legacy isolado</div>
-            <div className="px-2 py-1 bg-lime-500/20 text-lime-400 rounded text-[10px] font-bold border border-lime-500/30">Visao {viewMode === 'executive' ? 'executiva' : 'tecnica'}</div>
+          <div className="mt-4 grid grid-cols-3 gap-2 text-[10px] font-black uppercase tracking-[0.18em]">
+            <div className="rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-3 py-2 text-emerald-300">Terraform</div>
+            <div className="rounded-xl border border-orange-400/30 bg-orange-500/15 px-3 py-2 text-orange-300">Manual</div>
+            <div className="rounded-xl border border-sky-400/30 bg-sky-500/15 px-3 py-2 text-sky-300">Misto</div>
           </div>
         </Panel>
 
-        <Panel position="bottom-left" className="bg-zinc-900/90 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-white m-4 shadow-2xl max-w-[460px]">
-          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2">Leitura do diagrama</p>
-          <div className="text-[10px] text-zinc-300 leading-relaxed space-y-1">
-            <p><span className="text-teal-400 font-bold">Rotas MFE</span>: fan-out dos buckets sem poluir a borda do gateway.</p>
-            <p><span className="text-orange-400 font-bold">Rotas MS</span>: agrega o trafego antes de distribuir para Nexus e Barramento.</p>
-            <p><span className="text-zinc-400 font-bold">Tooltip</span>: o nome curto fica no canvas; o detalhe completo fica no hover.</p>
-            <p><span className="text-sky-400 font-bold">Executiva</span>: mostra dominios e agrupamentos. <span className="text-white font-bold">Tecnica</span>: volta aos componentes detalhados.</p>
+        <Panel position="bottom-left" className="bg-zinc-950/84 backdrop-blur-xl p-4 rounded-2xl border border-white/10 text-white m-4 shadow-2xl max-w-[560px]">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-2">Leitura Operacional</p>
+          <div className="space-y-1.5 text-[11px] leading-relaxed text-zinc-300">
+            <p>O runtime atual do `cmp-dev-nexus` tem <span className="font-bold text-white">2 clusters OKE ativos</span>: `cls-dev-nexus` e `cls-dev-observabilidade`.</p>
+            <p>Os <span className="font-bold text-white">serviços de dados</span> continuam majoritariamente fora do Terraform: PostgreSQL, Redis e AJD seguem como provisionamento manual.</p>
+            <p>Os <span className="font-bold text-white">buckets MFE</span> e o novo bucket `nexus-terraform-tfstate` foram criados em `19/03/2026`.</p>
+            <p>Os <span className="font-bold text-amber-300">load balancers legados</span> permanecem isolados no layout para não serem confundidos com o runtime atual.</p>
           </div>
-          <p className="text-[9px] text-zinc-600 mt-3 font-mono">gateway: bqdgz22e5... | private | cmp-dev-inv</p>
         </Panel>
 
-        <Panel position="bottom-right" className="bg-zinc-900/80 p-4 rounded-xl border border-white/10 text-[10px] font-mono text-zinc-500 m-4 max-w-[440px]">
-          SYSTEM_REPORT_ID: OCI-DEV-NEXUS-2026.03.14-r6 | labels compactos | tooltip hover | visao executiva/tecnica
+        <Panel position="bottom-right" className="bg-zinc-950/80 p-4 rounded-2xl border border-white/10 text-[10px] font-mono text-zinc-500 m-4 max-w-[440px]">
+          SOURCE: OCI CLI + cmp-dev-nexus inventory | unified-layout-v2026.03.19 | route /terraform mantida apenas como alias
         </Panel>
 
-        <Controls className="bg-zinc-800 border-zinc-700 !fill-white" />
-        <MiniMap className="bg-zinc-900 border-zinc-800" nodeColor="#3f3f46" maskColor="rgba(0, 0, 0, 0.7)" />
+        <Controls className="bg-zinc-900 border-zinc-700 !fill-white" />
+        <MiniMap className="bg-zinc-950 border-zinc-800" nodeColor="#3f3f46" maskColor="rgba(0, 0, 0, 0.72)" />
         <Background color="#27272a" gap={24} />
       </ReactFlow>
     </div>
   );
 }
-
-

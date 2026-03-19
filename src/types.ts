@@ -1,5 +1,8 @@
 export type ResourceType = 'cluster' | 'vcn' | 'subnet' | 'gateway' | 'bucket' | 'apigateway' | 'loadbalancer' | 'shieldcheck' | 'database' | 'box';
 
+export type ResourceStatus = 'active' | 'warning' | 'pending' | 'manual' | 'inactive';
+export type ResourceOrigin = 'terraform' | 'manual' | 'hybrid';
+
 export interface OCIResource {
     id?: string;
     name: string;
@@ -8,7 +11,8 @@ export interface OCIResource {
     summary?: string;
     details: string;
     tooltip?: string;
-    status: 'active' | 'warning' | 'pending' | 'manual' | 'inactive';
+    status: ResourceStatus;
+    managedBy?: ResourceOrigin;
     metrics?: {
         label: string;
         value: string;
