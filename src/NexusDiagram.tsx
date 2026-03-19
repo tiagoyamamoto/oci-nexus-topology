@@ -40,7 +40,7 @@ const initialNodes: Node[] = [
     type: 'compartment',
     position: { x: 1760, y: 30 },
     style: { width: 540, height: 930, backgroundColor: 'rgba(99, 102, 241, 0.05)', border: '2px dashed #6366f1', borderRadius: '20px', overflow: 'visible' },
-    data: { label: 'GovernanÁa e AutomaÁ„o', color: '#6366f1' },
+    data: { label: 'Governan√ßa e Automa√ß√£o', color: '#6366f1' },
   },
   {
     id: 'grp-nexus',
@@ -79,38 +79,38 @@ const initialNodes: Node[] = [
     parentId: 'grp-nexus',
     position: { x: 36, y: 960 },
     style: { width: 1644, height: 210, backgroundColor: 'rgba(113, 113, 122, 0.08)', border: '1px dashed #71717a', borderRadius: '18px', overflow: 'visible' },
-    data: { label: 'Legado e ResÌduos Operacionais', color: '#71717a' },
+    data: { label: 'Legado e Res√≠duos Operacionais', color: '#71717a' },
   },
 
-  { id: 'internet', parentId: 'grp-edge', position: { x: 150, y: 52 }, type: 'topology', data: { resource: { name: 'Internet', type: 'gateway', details: 'Entrada p˙blica dos consumidores e parceiros', status: 'active', managedBy: 'manual' } } },
+  { id: 'internet', parentId: 'grp-edge', position: { x: 150, y: 52 }, type: 'topology', data: { resource: { name: 'Internet', type: 'gateway', details: 'Entrada p√∫blica dos consumidores e parceiros', status: 'active', managedBy: 'manual' } } },
   { id: 'cloudflare', parentId: 'grp-edge', position: { x: 150, y: 176 }, type: 'topology', data: { resource: { name: 'Cloudflare', type: 'apigateway', details: 'DNS, proxy e camada WAF na borda', status: 'active', managedBy: 'manual' } } },
   { id: 'fortigate', parentId: 'grp-edge', position: { x: 150, y: 300 }, type: 'topology', data: { resource: { name: 'FortiGate', type: 'gateway', details: 'Borda compartilhada | rede corporativa', status: 'active', managedBy: 'manual' } } },
   { id: 'lb-crivo-dev', parentId: 'grp-edge', position: { x: 150, y: 424 }, type: 'topology', data: { resource: { name: 'Test_Crivo_Dev', type: 'loadbalancer', details: 'VIP privado que recebe host routing antes do API Gateway DEV', status: 'active', managedBy: 'manual' } } },
   { id: 'apigw-dev', parentId: 'grp-edge', position: { x: 150, y: 548 }, type: 'topology', data: { resource: { name: 'api-gateway-dev', type: 'apigateway', details: 'Gateway unificado DEV fora do compartment nexus; distribui MFE e MS para o runtime atual', status: 'active', managedBy: 'terraform' } } },
 
-  { id: 'vcn-dev', parentId: 'grp-network', position: { x: 40, y: 110 }, type: 'topology', data: { resource: { name: 'VCN-DEV', type: 'vcn', details: 'Rede compartilhada onde o API Gateway DEV est· conectado', status: 'active', managedBy: 'manual' } } },
+  { id: 'vcn-dev', parentId: 'grp-network', position: { x: 40, y: 110 }, type: 'topology', data: { resource: { name: 'VCN-DEV', type: 'vcn', details: 'Rede compartilhada onde o API Gateway DEV est√° conectado', status: 'active', managedBy: 'manual' } } },
   { id: 'drg', parentId: 'grp-network', position: { x: 180, y: 220 }, type: 'topology', data: { resource: { name: 'DRG-Invista-Shared', type: 'gateway', details: 'Hub de conectividade entre VCN-DEV e VCN OKE', status: 'active', managedBy: 'manual' } } },
   { id: 'vcn-oke', parentId: 'grp-network', position: { x: 320, y: 110 }, type: 'topology', data: { resource: { name: 'VCN vcn-oke', type: 'vcn', details: 'Rede 10.110.0.0/16 que sustenta os clusters atuais de Nexus e Observabilidade', status: 'active', managedBy: 'terraform' } } },
 
-  { id: 'azuredevops', parentId: 'grp-automation', position: { x: 170, y: 54 }, type: 'topology', data: { resource: { name: 'Azure DevOps', type: 'box', details: 'Pipelines de infraestrutura e deploy de aplicaÁıes; opera os componentes Terraform e os pÛs-deploys', status: 'active', managedBy: 'hybrid' } } },
-  { id: 'repo-tf', parentId: 'grp-automation', position: { x: 40, y: 220 }, type: 'topology', data: { resource: { name: 'tf_oci_clusters', type: 'box', details: 'RepositÛrio Terraform principal do ambiente OCI Nexus', status: 'active', managedBy: 'terraform' } } },
+  { id: 'azuredevops', parentId: 'grp-automation', position: { x: 170, y: 54 }, type: 'topology', data: { resource: { name: 'Azure DevOps', type: 'box', details: 'Pipelines de infraestrutura e deploy de aplica√ß√µes; opera os componentes Terraform e os p√≥s-deploys', status: 'active', managedBy: 'hybrid' } } },
+  { id: 'repo-tf', parentId: 'grp-automation', position: { x: 40, y: 220 }, type: 'topology', data: { resource: { name: 'tf_oci_clusters', type: 'box', details: 'Reposit√≥rio Terraform principal do ambiente OCI Nexus', status: 'active', managedBy: 'terraform' } } },
   { id: 'repo-templates', parentId: 'grp-automation', position: { x: 300, y: 220 }, type: 'topology', data: { resource: { name: 'pipeline-templates', type: 'box', details: 'Templates compartilhados de pipeline usados nos deploys', status: 'active', managedBy: 'terraform' } } },
-  { id: 'domain-nexus', parentId: 'grp-automation', position: { x: 40, y: 404 }, type: 'topology', data: { resource: { name: 'Identity Domain Nexus', type: 'shieldcheck', details: 'DomÌnio de identidade usado pela aplicaÁ„o; n„o aparece como recurso operacional dentro do compartment', status: 'active', managedBy: 'manual' } } },
-  { id: 'vault-nexus', parentId: 'grp-automation', position: { x: 300, y: 404 }, type: 'topology', data: { resource: { name: 'Vault / KMS Nexus', type: 'shieldcheck', details: 'Cofre e chaves para segredos e integraÁ„o com bancos; consumido pelo runtime e pela automaÁ„o', status: 'active', managedBy: 'hybrid' } } },
+  { id: 'domain-nexus', parentId: 'grp-automation', position: { x: 40, y: 404 }, type: 'topology', data: { resource: { name: 'Identity Domain Nexus', type: 'shieldcheck', details: 'Dom√≠nio de identidade usado pela aplica√ß√£o; n√£o aparece como recurso operacional dentro do compartment', status: 'active', managedBy: 'manual' } } },
+  { id: 'vault-nexus', parentId: 'grp-automation', position: { x: 300, y: 404 }, type: 'topology', data: { resource: { name: 'Vault / KMS Nexus', type: 'shieldcheck', details: 'Cofre e chaves para segredos e integra√ß√£o com bancos; consumido pelo runtime e pela automa√ß√£o', status: 'active', managedBy: 'hybrid' } } },
   { id: 'state-current', parentId: 'grp-automation', position: { x: 40, y: 588 }, type: 'topology', data: { resource: { name: 'nexus-terraform-tfstate', type: 'bucket', details: 'Bucket criado em 19/03/2026 para o estado atual do Terraform deste ambiente', status: 'active', managedBy: 'terraform' } } },
-  { id: 'state-legacy', parentId: 'grp-automation', position: { x: 300, y: 588 }, type: 'topology', data: { resource: { name: 'tfstate-terraform', type: 'bucket', details: 'Bucket de estado legado ainda existente no compartment; manter sob revis„o antes de remover', status: 'warning', managedBy: 'terraform' } } },
+  { id: 'state-legacy', parentId: 'grp-automation', position: { x: 300, y: 588 }, type: 'topology', data: { resource: { name: 'tfstate-terraform', type: 'bucket', details: 'Bucket de estado legado ainda existente no compartment; manter sob revis√£o antes de remover', status: 'warning', managedBy: 'terraform' } } },
 
-  { id: 'cls-nexus', parentId: 'grp-platform', position: { x: 70, y: 96 }, type: 'topology', data: { resource: { name: 'cls-dev-nexus', type: 'cluster', details: 'Cluster OKE ativo do domÌnio Nexus; recriado em 19/03/2026', status: 'active', managedBy: 'terraform' } } },
-  { id: 'np-nexus', parentId: 'grp-platform', position: { x: 70, y: 248 }, type: 'topology', data: { resource: { name: 'np-dev-1', type: 'subnet', details: 'Node pool ativo do cluster Nexus | 3 nÛs | VM.Standard.E4.Flex | 2 OCPU / 16 GB', status: 'active', managedBy: 'terraform' } } },
+  { id: 'cls-nexus', parentId: 'grp-platform', position: { x: 70, y: 96 }, type: 'topology', data: { resource: { name: 'cls-dev-nexus', type: 'cluster', details: 'Cluster OKE ativo do dom√≠nio Nexus; recriado em 19/03/2026', status: 'active', managedBy: 'terraform' } } },
+  { id: 'np-nexus', parentId: 'grp-platform', position: { x: 70, y: 248 }, type: 'topology', data: { resource: { name: 'np-dev-1', type: 'subnet', details: 'Node pool ativo do cluster Nexus | 3 n√≥s | VM.Standard.E4.Flex | 2 OCPU / 16 GB', status: 'active', managedBy: 'terraform' } } },
   { id: 'cls-obs', parentId: 'grp-platform', position: { x: 330, y: 96 }, type: 'topology', data: { resource: { name: 'cls-dev-observabilidade', type: 'cluster', details: 'Cluster OKE ativo de observabilidade; recriado em 19/03/2026', status: 'active', managedBy: 'terraform' } } },
-  { id: 'np-obs', parentId: 'grp-platform', position: { x: 330, y: 248 }, type: 'topology', data: { resource: { name: 'np-dev-3', type: 'subnet', details: 'Node pool ativo do cluster de observabilidade | 3 nÛs | VM.Standard.E4.Flex | 2 OCPU / 16 GB', status: 'active', managedBy: 'terraform' } } },
-  { id: 'runtime-summary', parentId: 'grp-platform', position: { x: 560, y: 170 }, type: 'topology', data: { resource: { name: 'Runtime Atual Nexus', shortName: 'RUNTIME', summary: '2 clusters OKE ativos', type: 'cluster', details: 'Hoje o cmp-dev-nexus opera com 2 clusters: cls-dev-nexus e cls-dev-observabilidade. O barramento n„o aparece mais como cluster ativo neste compartment.', status: 'active', managedBy: 'terraform' } } },
+  { id: 'np-obs', parentId: 'grp-platform', position: { x: 330, y: 248 }, type: 'topology', data: { resource: { name: 'np-dev-3', type: 'subnet', details: 'Node pool ativo do cluster de observabilidade | 3 n√≥s | VM.Standard.E4.Flex | 2 OCPU / 16 GB', status: 'active', managedBy: 'terraform' } } },
+  { id: 'runtime-summary', parentId: 'grp-platform', position: { x: 560, y: 170 }, type: 'topology', data: { resource: { name: 'Runtime Atual Nexus', shortName: 'RUNTIME', summary: '2 clusters OKE ativos', type: 'cluster', details: 'Hoje o cmp-dev-nexus opera com 2 clusters: cls-dev-nexus e cls-dev-observabilidade. O barramento n√£o aparece mais como cluster ativo neste compartment.', status: 'active', managedBy: 'terraform' } } },
 
-  { id: 'db-pg-nexus', parentId: 'grp-data', position: { x: 70, y: 98 }, type: 'topology', data: { resource: { name: 'NEXUS_DEV (PostgreSQL)', type: 'database', details: 'DB System PostgreSQL criado via console OCI; base operacional dos microsserviÁos Nexus', status: 'active', managedBy: 'manual' } } },
-  { id: 'db-pg-barramento', parentId: 'grp-data', position: { x: 330, y: 98 }, type: 'topology', data: { resource: { name: 'BARRAMENTO_DEV (PostgreSQL)', type: 'database', details: 'DB System PostgreSQL do barramento; existe no compartment, mas o cluster OKE correspondente n„o est· ativo aqui hoje', status: 'warning', managedBy: 'manual' } } },
-  { id: 'db-redis', parentId: 'grp-data', position: { x: 590, y: 98 }, type: 'topology', data: { resource: { name: 'NEXUS_DEV (Redis)', type: 'database', details: 'Redis Cluster ativo criado manualmente no OCI; usado para cache e sess„o', status: 'active', managedBy: 'manual' } } },
+  { id: 'db-pg-nexus', parentId: 'grp-data', position: { x: 70, y: 98 }, type: 'topology', data: { resource: { name: 'NEXUS_DEV (PostgreSQL)', type: 'database', details: 'DB System PostgreSQL criado via console OCI; base operacional dos microsservi√ßos Nexus', status: 'active', managedBy: 'manual' } } },
+  { id: 'db-pg-barramento', parentId: 'grp-data', position: { x: 330, y: 98 }, type: 'topology', data: { resource: { name: 'BARRAMENTO_DEV (PostgreSQL)', type: 'database', details: 'DB System PostgreSQL do barramento; existe no compartment, mas o cluster OKE correspondente n√£o est√° ativo aqui hoje', status: 'warning', managedBy: 'manual' } } },
+  { id: 'db-redis', parentId: 'grp-data', position: { x: 590, y: 98 }, type: 'topology', data: { resource: { name: 'NEXUS_DEV (Redis)', type: 'database', details: 'Redis Cluster ativo criado manualmente no OCI; usado para cache e sess√£o', status: 'active', managedBy: 'manual' } } },
   { id: 'db-ajd', parentId: 'grp-data', position: { x: 200, y: 250 }, type: 'topology', data: { resource: { name: 'NEXUS_DEV (AJD)', type: 'database', details: 'Autonomous JSON Database (AJD) ativo no compartment desde 21/01/2026', status: 'active', managedBy: 'manual' } } },
-  { id: 'data-summary', parentId: 'grp-data', position: { x: 470, y: 250 }, type: 'topology', data: { resource: { name: 'Dados Operacionais', shortName: 'DADOS', summary: '4 serviÁos de dados', type: 'database', details: 'O ambiente atual mistura clusters Terraform com bancos e cache provisionados manualmente no OCI.', status: 'active', managedBy: 'hybrid' } } },
+  { id: 'data-summary', parentId: 'grp-data', position: { x: 470, y: 250 }, type: 'topology', data: { resource: { name: 'Dados Operacionais', shortName: 'DADOS', summary: '4 servi√ßos de dados', type: 'database', details: 'O ambiente atual mistura clusters Terraform com bancos e cache provisionados manualmente no OCI.', status: 'active', managedBy: 'hybrid' } } },
 
   { id: 'mfe-summary', parentId: 'grp-storage', position: { x: 70, y: 104 }, type: 'topology', data: { resource: { name: 'Buckets MFE DEV', shortName: 'MFE BUCKETS', summary: '6 buckets de frontends', type: 'bucket', details: 'Buckets criados em 19/03/2026: mfe-auth-dev, mfe-formalization-dev, mfe-person-dev, mfe-poc-dev, mfe-shell-dev e mfe-user-dev.', status: 'active', managedBy: 'terraform' } } },
   { id: 'bucket-shell', parentId: 'grp-storage', position: { x: 340, y: 44 }, type: 'topology', data: { resource: { name: 'mfe-shell-dev', type: 'bucket', details: 'Assets do shell frontend', status: 'active', managedBy: 'terraform' } } },
@@ -119,11 +119,11 @@ const initialNodes: Node[] = [
   { id: 'bucket-person', parentId: 'grp-storage', position: { x: 340, y: 204 }, type: 'topology', data: { resource: { name: 'mfe-person-dev', type: 'bucket', details: 'Assets do person frontend', status: 'active', managedBy: 'terraform' } } },
   { id: 'bucket-poc', parentId: 'grp-storage', position: { x: 580, y: 204 }, type: 'topology', data: { resource: { name: 'mfe-poc-dev', type: 'bucket', details: 'Assets do poc frontend', status: 'active', managedBy: 'terraform' } } },
   { id: 'bucket-formalization', parentId: 'grp-storage', position: { x: 820, y: 204 }, type: 'topology', data: { resource: { name: 'mfe-formalization-dev', type: 'bucket', details: 'Assets do formalization frontend', status: 'active', managedBy: 'terraform' } } },
-  { id: 'storage-state-summary', parentId: 'grp-storage', position: { x: 1120, y: 104 }, type: 'topology', data: { resource: { name: 'Terraform State', shortName: 'STATE', summary: 'bucket atual + bucket legado', type: 'bucket', details: 'O compartment mantÈm o novo bucket nexus-terraform-tfstate e tambÈm o tfstate-terraform herdado.', status: 'warning', managedBy: 'terraform' } } },
+  { id: 'storage-state-summary', parentId: 'grp-storage', position: { x: 1120, y: 104 }, type: 'topology', data: { resource: { name: 'Terraform State', shortName: 'STATE', summary: 'bucket atual + bucket legado', type: 'bucket', details: 'O compartment mant√©m o novo bucket nexus-terraform-tfstate e tamb√©m o tfstate-terraform herdado.', status: 'warning', managedBy: 'terraform' } } },
 
-  { id: 'legacy-lbs', parentId: 'grp-legacy', position: { x: 90, y: 78 }, type: 'topology', data: { resource: { name: 'Legacy Load Balancers', type: 'loadbalancer', details: 'Existem 4 load balancers ativos associados a clusters antigos/deletados. Devem ser tratados como resÌduo operacional atÈ validaÁ„o e limpeza.', status: 'warning', managedBy: 'manual' } } },
-  { id: 'legacy-gw', parentId: 'grp-legacy', position: { x: 380, y: 78 }, type: 'topology', data: { resource: { name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'Gateway legado j· removido do fluxo principal; permanece apenas como referÍncia histÛrica.', status: 'inactive', managedBy: 'manual' } } },
-  { id: 'legacy-note', parentId: 'grp-legacy', position: { x: 670, y: 78 }, type: 'topology', data: { resource: { name: 'Leitura Operacional', shortName: 'LEGADO', summary: 'n„o confundir com runtime atual', type: 'box', details: 'O desenho principal considera apenas os 2 clusters OKE atuais. Componentes Ûrf„os ou deletados foram isolados aqui para evitar leitura incorreta.', status: 'warning', managedBy: 'hybrid' } } },
+  { id: 'legacy-lbs', parentId: 'grp-legacy', position: { x: 90, y: 78 }, type: 'topology', data: { resource: { name: 'Legacy Load Balancers', type: 'loadbalancer', details: 'Existem 4 load balancers ativos associados a clusters antigos/deletados. Devem ser tratados como res√≠duo operacional at√© valida√ß√£o e limpeza.', status: 'warning', managedBy: 'manual' } } },
+  { id: 'legacy-gw', parentId: 'grp-legacy', position: { x: 380, y: 78 }, type: 'topology', data: { resource: { name: 'api-gateway-nexus-dev', type: 'apigateway', details: 'Gateway legado j√° removido do fluxo principal; permanece apenas como refer√™ncia hist√≥rica.', status: 'inactive', managedBy: 'manual' } } },
+  { id: 'legacy-note', parentId: 'grp-legacy', position: { x: 670, y: 78 }, type: 'topology', data: { resource: { name: 'Leitura Operacional', shortName: 'LEGADO', summary: 'n√£o confundir com runtime atual', type: 'box', details: 'O desenho principal considera apenas os 2 clusters OKE atuais. Componentes √≥rf√£os ou deletados foram isolados aqui para evitar leitura incorreta.', status: 'warning', managedBy: 'hybrid' } } },
 ];
 
 const initialEdges: Edge[] = [
@@ -132,7 +132,7 @@ const initialEdges: Edge[] = [
   { id: 'e-forti-lb', source: 'fortigate', target: 'lb-crivo-dev', label: 'entrada privada', animated: true, type: 'smoothstep', style: { stroke: '#0ea5e9' } },
   { id: 'e-lb-apigw', source: 'lb-crivo-dev', target: 'apigw-dev', label: 'host routing', animated: true, type: 'smoothstep', style: { stroke: '#0ea5e9' } },
 
-  { id: 'e-vcndev-drg', source: 'vcn-dev', target: 'drg', label: 'tr‚nsito', type: 'smoothstep', style: { stroke: '#eab308' } },
+  { id: 'e-vcndev-drg', source: 'vcn-dev', target: 'drg', label: 'tr√¢nsito', type: 'smoothstep', style: { stroke: '#eab308' } },
   { id: 'e-drg-vcnoke', source: 'drg', target: 'vcn-oke', label: 'ATT-VCN-OKE-DEV', type: 'smoothstep', style: { stroke: '#eab308' } },
 
   { id: 'e-apigw-runtime', source: 'apigw-dev', target: 'runtime-summary', label: 'rotas MS', animated: true, type: 'bezier', style: { stroke: '#f97316' } },
@@ -213,6 +213,7 @@ export function NexusDiagram() {
         nodeTypes={nodeTypes}
         fitView
         fitViewOptions={{ padding: 0.14, minZoom: 0.3, maxZoom: 1.2 }}
+        proOptions={{ hideAttribution: true }}
         defaultEdgeOptions={{
           type: 'bezier',
           style: { stroke: '#71717a', strokeWidth: 1.7 },
@@ -222,7 +223,7 @@ export function NexusDiagram() {
           labelBgBorderRadius: 8,
         }}
       >
-        <Panel position="top-left" className="bg-zinc-950/82 backdrop-blur-xl p-6 rounded-3xl border border-white/10 text-white m-4 shadow-2xl max-w-[700px]">
+        <Panel position="top-left" className="m-4 max-w-[700px] rounded-3xl border border-white/10 bg-zinc-950/82 p-6 text-white shadow-2xl backdrop-blur-xl">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h1 className="text-2xl font-black tracking-tight">OCI Nexus DEV</h1>
@@ -239,13 +240,13 @@ export function NexusDiagram() {
                 onClick={() => setViewMode('technical')}
                 className={`rounded-lg px-3 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition ${viewMode === 'technical' ? 'bg-white text-zinc-950' : 'text-zinc-400 hover:text-white'}`}
               >
-                TÈcnica
+                T√©cnica
               </button>
             </div>
           </div>
 
           <p className="mt-4 text-sm leading-relaxed text-zinc-300">
-            O desenho agora junta a vis„o operacional da OCI com a vis„o de automaÁ„o. Cada nÛ mostra explicitamente se o recurso È <span className="text-emerald-300 font-bold">Terraform</span>, <span className="text-orange-300 font-bold">Manual</span> ou <span className="text-sky-300 font-bold">Misto</span>.
+            O desenho agora junta a vis√£o operacional da OCI com a vis√£o de automa√ß√£o. Cada n√≥ mostra explicitamente se o recurso √© <span className="text-emerald-300 font-bold">Terraform</span>, <span className="text-orange-300 font-bold">Manual</span> ou <span className="text-sky-300 font-bold">Misto</span>.
           </p>
 
           <div className="mt-4 grid grid-cols-3 gap-2 text-[10px] font-black uppercase tracking-[0.18em]">
@@ -255,22 +256,27 @@ export function NexusDiagram() {
           </div>
         </Panel>
 
-        <Panel position="bottom-left" className="bg-zinc-950/84 backdrop-blur-xl p-4 rounded-2xl border border-white/10 text-white m-4 shadow-2xl max-w-[560px]">
+        <Panel position="bottom-left" className="m-4 max-w-[560px] rounded-2xl border border-white/10 bg-zinc-950/84 p-4 text-white shadow-2xl backdrop-blur-xl">
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-2">Leitura Operacional</p>
           <div className="space-y-1.5 text-[11px] leading-relaxed text-zinc-300">
-            <p>O runtime atual do `cmp-dev-nexus` tem <span className="font-bold text-white">2 clusters OKE ativos</span>: `cls-dev-nexus` e `cls-dev-observabilidade`.</p>
-            <p>Os <span className="font-bold text-white">serviÁos de dados</span> continuam majoritariamente fora do Terraform: PostgreSQL, Redis e AJD seguem como provisionamento manual.</p>
-            <p>Os <span className="font-bold text-white">buckets MFE</span> e o novo bucket `nexus-terraform-tfstate` foram criados em `19/03/2026`.</p>
-            <p>Os <span className="font-bold text-amber-300">load balancers legados</span> permanecem isolados no layout para n„o serem confundidos com o runtime atual.</p>
+            <p>O runtime atual do <code className="font-mono text-zinc-200">cmp-dev-nexus</code> tem <span className="font-bold text-white">2 clusters OKE ativos</span>: <code className="font-mono text-zinc-200">cls-dev-nexus</code> e <code className="font-mono text-zinc-200">cls-dev-observabilidade</code>.</p>
+            <p>Os <span className="font-bold text-white">servi√ßos de dados</span> continuam majoritariamente fora do Terraform: PostgreSQL, Redis e AJD seguem como provisionamento manual.</p>
+            <p>Os <span className="font-bold text-white">buckets MFE</span> e o novo bucket <code className="font-mono text-zinc-200">nexus-terraform-tfstate</code> foram criados em <code className="font-mono text-zinc-200">19/03/2026</code>.</p>
+            <p>Os <span className="font-bold text-amber-300">load balancers legados</span> permanecem isolados no layout para n√£o serem confundidos com o runtime atual.</p>
           </div>
         </Panel>
 
-        <Panel position="bottom-right" className="bg-zinc-950/80 p-4 rounded-2xl border border-white/10 text-[10px] font-mono text-zinc-500 m-4 max-w-[440px]">
+        <Panel position="bottom-right" className="m-4 mr-[188px] max-w-[440px] rounded-2xl border border-white/10 bg-zinc-950/80 p-4 text-[10px] font-mono text-zinc-500">
           SOURCE: OCI CLI + cmp-dev-nexus inventory | unified-layout-v2026.03.19 | route /terraform mantida apenas como alias
         </Panel>
 
-        <Controls className="bg-zinc-900 border-zinc-700 !fill-white" />
-        <MiniMap className="bg-zinc-950 border-zinc-800" nodeColor="#3f3f46" maskColor="rgba(0, 0, 0, 0.72)" />
+        <Controls position="bottom-right" className="!mb-4 !mr-4 overflow-hidden !rounded-xl border !border-zinc-700 bg-zinc-900/95 !fill-white shadow-xl" />
+        <MiniMap
+          position="bottom-right"
+          className="!mb-[120px] !mr-4 overflow-hidden !rounded-2xl border !border-zinc-800 bg-zinc-950/95 shadow-2xl"
+          nodeColor="#3f3f46"
+          maskColor="rgba(0, 0, 0, 0.72)"
+        />
         <Background color="#27272a" gap={24} />
       </ReactFlow>
     </div>
